@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
+
 public class TenantDashboardController {
 
     @FXML private Label welcomeLabel;
@@ -23,6 +25,9 @@ public class TenantDashboardController {
     @FXML private TextField searchField;
     @FXML private ComboBox<String> maxPriceFilter;
     @FXML private CheckBox availableOnlyFilter;
+    @FXML private ComboBox<String> maxPriceFilter;
+    @FXML private CheckBox availableOnlyFilter;
+
 
     private final PropertyDAO propertyDAO = new PropertyDAO();
     private List<Property> allProperties;
