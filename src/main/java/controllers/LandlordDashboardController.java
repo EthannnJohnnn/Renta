@@ -30,22 +30,26 @@ public class LandlordDashboardController {
     @FXML
     public void initialize() {
         User user = SessionManager.getInstance().getCurrentUser();
+
         if (user != null) {
             welcomeLabel.setText("Welcome, " + user.getUsername());
             loadListings(user.getId());
 
+            // Get total pending bookings using the newly added backend method
+            int pendingCount = bookingDAO.countPendingByLandlordId(user.getId());
+            pendingCountStat.setText(String.valueOf(pendingCount));
 
-        }
-
-
-        // In initialize(), after loading listings:
-        int pendingCount = bookingDAO.countPendingByLandlordId(user.getId());
-        pendingCountStat.setText(String.valueOf(pendingCount));
-        if (pendingCount > 0) {
-            pendingBannerTitle.setText("⚠️ You have " + pendingCount + " pending booking request(s)!");
-            pendingBannerSub.setText("Review and respond to keep your tenants informed.");
-            pendingBanner.setVisible(true);
-            pendingBanner.setManaged(true);
+            // Update UI Based on Pending Count
+            if (pendingCount > 0) {
+                pendingBannerTitle.setText("⚠️ You have " + pendingCount + " pending booking request(s)!");
+                pendingBannerSub.setText("Review and respond to keep your tenants informed.");
+                pendingBanner.setVisible(true);
+                pendingBanner.setManaged(true);
+            } else {
+                // If 0, hide the banner entirely
+                pendingBanner.setVisible(false);
+                pendingBanner.setManaged(false);
+            }
         }
     }
 
