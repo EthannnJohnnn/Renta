@@ -12,7 +12,8 @@ public class PropertyDAO {
 
     // CREATE
     public boolean addProperty(Property property) {
-        String sql = "INSERT INTO properties (landlord_id, name, address, description) VALUES (?, ?, ?, ?)";
+        // ADDED image_url and the 5th ?
+        String sql = "INSERT INTO properties (landlord_id, name, address, description, image_url) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseHelper.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -20,6 +21,7 @@ public class PropertyDAO {
             pstmt.setString(2, property.getName());
             pstmt.setString(3, property.getAddress());
             pstmt.setString(4, property.getDescription());
+            pstmt.setString(5, property.getImageUrl()); // NEW LINE
 
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
