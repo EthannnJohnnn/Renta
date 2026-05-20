@@ -11,7 +11,8 @@ CREATE TABLE IF NOT EXISTS properties (
     name TEXT NOT NULL,
     address TEXT NOT NULL,
     description TEXT,
-    FOREIGN KEY (landlord_id) REFERENCES users(id) ON DELETE CASCADE
+    image_url TEXT, -- NEW COLUMN FOR UI IMAGES
+    FOREIGN KEY (landlord_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS rooms (
