@@ -1,24 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
 
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controllers.LandlordDashboardController"
-            styleClass="page-container"
-            stylesheets="@../styles/styles.css">
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane styleClass="page-container" stylesheets="@../styles/styles.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.LandlordDashboardController">
 
     <!-- TOP NAVBAR -->
     <top>
-        <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="14">
-            <padding><Insets top="14" right="24" bottom="14" left="24"/></padding>
-            <Label text="🏠" style="-fx-font-size: 20px;"/>
-            <Label text="Renta" styleClass="nav-brand"/>
-            <Region HBox.hgrow="ALWAYS"/>
-            <Label fx:id="welcomeLabel" text="Welcome, Landlord" styleClass="nav-title"/>
-            <Label text="·" style="-fx-text-fill: #475569;"/>
-            <Button text="Logout" onAction="#handleLogout" styleClass="danger-button"/>
+        <HBox alignment="CENTER_LEFT" spacing="14" styleClass="navbar">
+            <padding><Insets bottom="14" left="24" right="24" top="14" /></padding>
+            <Label style="-fx-font-size: 20px;" text="⌂" />
+            <Label styleClass="nav-brand" text="Renta" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Label fx:id="welcomeLabel" styleClass="nav-title" text="Welcome, Landlord" />
+            <Label style="-fx-text-fill: #475569;" text="·" />
+            <Button onAction="#handleLogout" styleClass="danger-button" text="Logout" />
         </HBox>
     </top>
 
@@ -26,109 +29,86 @@
     <center>
         <ScrollPane fitToWidth="true" styleClass="scroll-pane">
             <VBox spacing="20">
-                <padding><Insets top="28" right="32" bottom="32" left="32"/></padding>
+                <padding><Insets bottom="32" left="32" right="32" top="28" /></padding>
 
                 <!-- ═══ UX IMPROVEMENT #1: PENDING REQUESTS NOTIFICATION BANNER ═══ -->
                 <!-- Shown dynamically by LandlordDashboardController when pendingCount > 0 -->
                 <!-- Controller: set fx:id="pendingBanner" visible/managed based on count  -->
-                <HBox fx:id="pendingBanner" styleClass="alert-banner"
-                      alignment="CENTER_LEFT" spacing="16"
-                      visible="false" managed="false">
-                    <Label text="⚠️" style="-fx-font-size: 22px;"/>
+                <HBox fx:id="pendingBanner" alignment="CENTER_LEFT" managed="false" spacing="16" styleClass="alert-banner" visible="false">
+                    <Label style="-fx-font-size: 22px;" text="⚠" />
                     <VBox spacing="2" HBox.hgrow="ALWAYS">
-                        <Label fx:id="pendingBannerTitle"
-                               text="You have pending booking requests!"
-                               styleClass="alert-banner-text"/>
-                        <Label fx:id="pendingBannerSub"
-                               text="Review and respond to keep your tenants informed."
-                               styleClass="alert-banner-sub"/>
+                        <Label fx:id="pendingBannerTitle" styleClass="alert-banner-text" text="You have pending booking requests!" />
+                        <Label fx:id="pendingBannerSub" styleClass="alert-banner-sub" text="Review and respond to keep your tenants informed." />
                     </VBox>
-                    <Button text="Review Now →"
-                            onAction="#handleBookingRequests"
-                            styleClass="warning-button"/>
+                    <Button onAction="#handleBookingRequests" styleClass="warning-button" text="Review Now →" />
                 </HBox>
 
                 <!-- ═══ HERO BANNER ═══ -->
-                <VBox styleClass="hero-banner" spacing="10">
-                    <padding><Insets top="24" right="28" bottom="24" left="28"/></padding>
-                    <Label text="🏢  Manage Your Properties" styleClass="hero-title"/>
-                    <Label text="Add listings, manage rooms, and handle incoming booking requests."
-                           styleClass="hero-subtitle"/>
+                <VBox spacing="10" styleClass="hero-banner">
+                    <padding><Insets bottom="24" left="28" right="28" top="24" /></padding>
+                    <Label styleClass="hero-title" text="Manage Your Properties" />
+                    <Label styleClass="hero-subtitle" text="Add listings, manage rooms, and handle incoming booking requests." />
                     <HBox spacing="12">
-                        <VBox.margin><Insets top="8"/></VBox.margin>
-                        <Button text="Manage Listings"
-                                onAction="#handleManageListings"
-                                styleClass="card-hero-action"/>
-                        <Button text="📩  Booking Requests"
-                                onAction="#handleBookingRequests"
-                                styleClass="card-hero-action"/>
-                        <Button text="+ Add Property"
-                                onAction="#handleAddProperty"
-                                styleClass="card-hero-action"/>
+                        <VBox.margin><Insets top="8" /></VBox.margin>
+                        <Button onAction="#handleManageListings" styleClass="card-hero-action" text="Manage Listings" />
+                        <Button onAction="#handleBookingRequests" styleClass="card-hero-action" text="✉  Booking Requests" />
+                        <Button onAction="#handleAddProperty" styleClass="card-hero-action" text="+ Add Property" />
                     </HBox>
                 </VBox>
 
                 <!-- ═══ STAT CARDS ═══ -->
                 <HBox spacing="16">
-                    <VBox styleClass="stat-card" spacing="8" HBox.hgrow="ALWAYS">
+                    <VBox spacing="8" styleClass="stat-card" HBox.hgrow="ALWAYS">
                         <HBox alignment="CENTER_LEFT" spacing="14">
-                            <VBox styleClass="stat-icon-box-blue" alignment="CENTER">
-                                <Label text="🏘" style="-fx-font-size: 22px;"/>
+                            <VBox alignment="CENTER" styleClass="stat-icon-box-blue">
+                                <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2563EB;" text="⌂" />
                             </VBox>
-                            <VBox spacing="2">
-                                <Label text="My" styleClass="stat-label"/>
-                                <Label text="Properties" styleClass="stat-label"/>
-                            </VBox>
+                            <VBox spacing="2" />
                         </HBox>
-                        <Label text="Manage" styleClass="stat-number"
-                               style="-fx-font-size: 20px;"/>
+                        <Label style="-fx-font-size: 20px;" styleClass="stat-number" text="Manage" />
+                          <Label styleClass="stat-label" text="Properties">
+                     <graphic>
+                                <Label styleClass="stat-label" text="My" />
+                     </graphic>
+                  </Label>
                     </VBox>
-                    <VBox styleClass="stat-card" spacing="8" HBox.hgrow="ALWAYS">
+                    <VBox spacing="8" styleClass="stat-card" HBox.hgrow="ALWAYS">
                         <HBox alignment="CENTER_LEFT" spacing="14">
-                            <VBox styleClass="stat-icon-box-green" alignment="CENTER">
-                                <Label text="🚪" style="-fx-font-size: 22px;"/>
+                            <VBox alignment="CENTER" styleClass="stat-icon-box-green">
+                                <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #16A34A;" text="⊞" />
                             </VBox>
-                            <VBox spacing="2">
-                                <Label text="Room" styleClass="stat-label"/>
-                                <Label text="Management" styleClass="stat-label"/>
-                            </VBox>
+                            <VBox spacing="2" />
                         </HBox>
-                        <Label text="Rooms" styleClass="stat-number"
-                               style="-fx-font-size: 20px;"/>
+                        <Label style="-fx-font-size: 20px;" styleClass="stat-number" text="Rooms" />
+                          <Label styleClass="stat-label" text="Management" />
+                          <Label styleClass="stat-label" text="Room" />
                     </VBox>
-                    <VBox styleClass="stat-card" spacing="8" HBox.hgrow="ALWAYS">
+                    <VBox spacing="8" styleClass="stat-card" HBox.hgrow="ALWAYS">
                         <HBox alignment="CENTER_LEFT" spacing="14">
-                            <VBox styleClass="stat-icon-box-amber" alignment="CENTER">
-                                <Label text="📩" style="-fx-font-size: 22px;"/>
+                            <VBox alignment="CENTER" styleClass="stat-icon-box-amber">
+                                <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #D97706;" text="✉" />
                             </VBox>
-                            <VBox spacing="2">
-                                <Label fx:id="pendingStatLabel" text="Pending" styleClass="stat-label"/>
-                                <Label text="Requests" styleClass="stat-label"/>
-                            </VBox>
+                            <VBox spacing="2" />
                         </HBox>
                         <!-- Controller sets this to the actual pending count -->
-                        <Label fx:id="pendingCountStat" text="0" styleClass="stat-number"
-                               style="-fx-font-size: 28px;"/>
+                        <Label styleClass="stat-label" text="Pending Requests" />
+                        <Label fx:id="pendingCountStat" style="-fx-font-size: 28px;" styleClass="stat-number" text="0" />
                     </VBox>
                 </HBox>
 
                 <!-- ═══ MY LISTINGS PREVIEW ═══ -->
-                <VBox styleClass="card" spacing="14">
+                <VBox spacing="14" styleClass="card">
                     <HBox alignment="CENTER_LEFT">
-                        <Label text="MY LISTINGS PREVIEW" styleClass="section-label"
-                               HBox.hgrow="ALWAYS"/>
-                        <Button text="View All →" onAction="#handleManageListings"
-                                styleClass="ghost-button"/>
+                        <Label styleClass="section-label" text="MY LISTINGS PREVIEW" HBox.hgrow="ALWAYS" />
+                        <Button onAction="#handleManageListings" styleClass="ghost-button" text="View All →" />
                     </HBox>
                     <!-- Better empty state -->
                     <ListView fx:id="listingsView" prefHeight="220" styleClass="list-view">
                         <placeholder>
                             <VBox alignment="CENTER" spacing="8">
-                                <Label text="🏘" styleClass="empty-state-icon"/>
-                                <Label text="No properties listed yet"
-                                       styleClass="empty-state-title"/>
-                                <Label text="Click '+ Add Property' above to list your first property."
-                                       styleClass="empty-state-sub"/>
+                                <Label styleClass="empty-state-icon" text="⌂" />
+                                <Label styleClass="empty-state-title" text="No properties listed yet" />
+                                <Label styleClass="empty-state-sub" text="Click '+ Add Property' above to list your first property." />
                             </VBox>
                         </placeholder>
                     </ListView>

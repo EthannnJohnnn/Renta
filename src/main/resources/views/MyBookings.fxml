@@ -12,7 +12,7 @@
     <top>
         <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="14">
             <padding><Insets top="14" right="24" bottom="14" left="24"/></padding>
-            <Label text="🏠" style="-fx-font-size: 20px;"/>
+            <Label text="⌂" style="-fx-font-size: 20px;"/>
             <Label text="Renta" styleClass="nav-brand"/>
             <Label text="/" style="-fx-text-fill: #475569;"/>
             <Label text="My Bookings" styleClass="nav-title"/>
@@ -35,31 +35,27 @@
                 </VBox>
             </HBox>
 
-            <!-- ═══ UX IMPROVEMENT: EXTENDED STATUS GUIDE ═══ -->
-            <!-- Now includes CANCELLED and COMPLETED statuses -->
+            <!-- ═══ EXTENDED STATUS GUIDE ═══ -->
             <HBox styleClass="card-flat" alignment="CENTER_LEFT" spacing="14">
                 <Label text="Status Guide" styleClass="label-text"/>
-                <Label text="⏳ PENDING"   styleClass="badge-pending"/>
+                <Label text="⧗ PENDING"   styleClass="badge-pending"/>
                 <Label text="→ Awaiting landlord" styleClass="subtitle"/>
                 <Label text=" | " styleClass="subtitle"/>
-                <Label text="✅ APPROVED"  styleClass="badge-approved"/>
+                <Label text="✓ APPROVED"  styleClass="badge-approved"/>
                 <Label text="→ Confirmed" styleClass="subtitle"/>
                 <Label text=" | " styleClass="subtitle"/>
-                <Label text="❌ REJECTED"  styleClass="badge-rejected"/>
+                <!-- NEW badges -->
+                <Label text="✕ REJECTED"  styleClass="badge-rejected"/>
                 <Label text="→ Declined" styleClass="subtitle"/>
                 <Label text=" | " styleClass="subtitle"/>
-                <!-- NEW badges -->
-                <Label text="🚫 CANCELLED" styleClass="badge-cancelled"/>
+                <Label text="⊘ CANCELLED" styleClass="badge-cancelled"/>
                 <Label text="→ You cancelled" styleClass="subtitle"/>
                 <Label text=" | " styleClass="subtitle"/>
-                <Label text="🏁 COMPLETED" styleClass="badge-completed"/>
+                <Label text="⚐ COMPLETED" styleClass="badge-completed"/>
                 <Label text="→ Tenancy ended" styleClass="subtitle"/>
             </HBox>
 
             <!-- Bookings Table -->
-            <!-- ═══ UX IMPROVEMENT #1 (TENANT): CANCEL REQUEST COLUMN ADDED ═══ -->
-            <!-- actionsColumn is shown only for PENDING rows — handled by cell factory  -->
-            <!-- in MyBookingsController: show "Cancel Request" button only when PENDING  -->
             <TableView fx:id="bookingsTable" styleClass="table-view" VBox.vgrow="ALWAYS">
                 <columns>
                     <TableColumn fx:id="propertyColumn" text="Property"      prefWidth="185"/>
@@ -67,13 +63,12 @@
                     <TableColumn fx:id="priceColumn"    text="Price / Month" prefWidth="130"/>
                     <TableColumn fx:id="dateColumn"     text="Booking Date"  prefWidth="140"/>
                     <TableColumn fx:id="statusColumn"   text="Status"        prefWidth="130"/>
-                    <!-- NEW: Actions column — Cancel Request for PENDING rows -->
-                    <TableColumn fx:id="actionsColumn"  text="Actions"       prefWidth="150"/>
+                    <!-- Expanded width for Cancel Request button -->
+                    <TableColumn fx:id="actionsColumn"  text="Actions"       prefWidth="160"/>
                 </columns>
-                <!-- ═══ UX IMPROVEMENT: FRIENDLY EMPTY STATE ═══ -->
                 <placeholder>
                     <VBox alignment="CENTER" spacing="10">
-                        <Label text="📋" styleClass="empty-state-icon"/>
+                        <Label text="☰" styleClass="empty-state-icon"/>
                         <Label text="No bookings yet"
                                styleClass="empty-state-title"/>
                         <Label text="Browse properties and book a room to get started."

@@ -21,15 +21,15 @@
             translateX="-300" translateY="230"/>
 
     <!-- Login Card -->
-    <VBox alignment="CENTER" maxWidth="420" spacing="0"
+    <VBox alignment="CENTER" maxWidth="360" maxHeight="480" spacing="0"
           style="-fx-background-color: white; -fx-background-radius: 18;
                  -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 28, 0, 0, 6);
-                 -fx-padding: 40 40 36 40;">
+                 -fx-padding: 32 32 28 32;">
 
         <!-- Brand -->
         <VBox alignment="CENTER" spacing="4">
             <Label text="Renta"
-                   style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #1E40AF;"/>
+                   style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #1E40AF;"/>
             <Label text="Property Rental Management"
                    style="-fx-font-size: 13px; -fx-text-fill: #64748B;"/>
         </VBox>

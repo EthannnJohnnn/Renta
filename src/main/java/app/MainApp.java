@@ -24,6 +24,9 @@ public class MainApp extends Application {
 
         // --- FRONTEND LOGIC: Load the Login screen ---
         switchTo("views/Login.fxml");
+        
+        // Start maximizing the window for a modern, immersive desktop experience
+        primaryStage.setMaximized(true);
         primaryStage.show();
     }
 
@@ -38,8 +41,8 @@ public class MainApp extends Application {
                 // If scene exists, preserve window size/fullscreen state by just swapping the root
                 primaryStage.getScene().setRoot(root);
             } else {
-                // Initial launch with new larger standard
-                Scene scene = new Scene(root, 1024, 768);
+                // Initial launch with modern 16:9 standard resolution HD
+                Scene scene = new Scene(root, 1280, 720);
                 primaryStage.setScene(scene);
             }
         } catch (IOException e) {

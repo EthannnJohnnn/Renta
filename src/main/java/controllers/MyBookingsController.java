@@ -51,7 +51,7 @@ public class MyBookingsController {
         dateColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().bookingDate));
         statusColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().status));
 
-        // ✅ Status badge renderer
+        // Status badge renderer
         statusColumn.setCellFactory(col -> new TableCell<>() {
             @Override
             protected void updateItem(String status, boolean empty) {
@@ -70,7 +70,7 @@ public class MyBookingsController {
             }
         });
 
-        // Add the actions column cell factory logic
+        // Actions column: Cancel Request button only for PENDING rows
         actionsColumn.setCellFactory(param -> new TableCell<>() {
             private final javafx.scene.control.Button cancelBtn = new javafx.scene.control.Button("Cancel Request");
 
@@ -80,7 +80,7 @@ public class MyBookingsController {
                     MyBookingRow row = getTableView().getItems().get(getIndex());
                     if (row != null) {
                         bookingDAO.updateStatus(row.bookingId, "CANCELLED");
-                        loadBookings(); 
+                        loadBookings();
                     }
                 });
             }
@@ -107,9 +107,11 @@ public class MyBookingsController {
     private String getStatusBadgeClass(String status) {
         if (status == null) return "badge-pending";
         return switch (status.toUpperCase()) {
-            case "APPROVED" -> "badge-approved";
-            case "REJECTED" -> "badge-rejected";
-            default -> "badge-pending";
+            case "APPROVED"  -> "badge-approved";
+            case "REJECTED"  -> "badge-rejected";
+            case "CANCELLED" -> "badge-cancelled";
+            case "COMPLETED" -> "badge-completed";
+            default          -> "badge-pending";
         };
     }
 
@@ -118,27 +120,27 @@ public class MyBookingsController {
         List<Booking> bookings = bookingDAO.getBookingsByTenantId(user.getId());
 
         List<Property> properties = propertyDAO.getAllProperties();
-        Map<Integer, String> propertyNameById = new HashMap<>();
+        Map<Integer, String> propertyNameByRoomPropertyId = new HashMap<>();
         for (Property p : properties) {
-            propertyNameById.put(p.getId(), p.getName());
+            propertyNameByRoomPropertyId.put(p.getId(), p.getName());
         }
 
         List<MyBookingRow> rows = new ArrayList<>();
         for (Booking booking : bookings) {
-            String roomLabel = "Room #" + booking.getRoomId();
-            String priceLabel = "—";
+            String roomLabel    = "Room #" + booking.getRoomId();
+            String priceLabel   = "—";
             String propertyLabel = "Property";
 
-            // Requires RoomDAO.getRoomById(int) (backend task)
-            // Room room = roomDAO.getRoomById(booking.getRoomId());
-            // if (room != null) {
-            //     roomLabel = room.getRoomNumber();
-            //     priceLabel = "₱" + String.format("%.2f", room.getPrice());
-            //     propertyLabel = propertyNameById.getOrDefault(
-            //             room.getPropertyId(),
-            //             "Property #" + room.getPropertyId()
-            //     );
-            // }
+            // RoomDAO.getRoomById() confirmed ready (merged in PR 26/27)
+            Room room = roomDAO.getRoomById(booking.getRoomId());
+            if (room != null) {
+                roomLabel     = room.getRoomNumber();
+                priceLabel    = "₱" + String.format("%.2f", room.getPrice());
+                propertyLabel = propertyNameByRoomPropertyId.getOrDefault(
+                        room.getPropertyId(),
+                        "Property #" + room.getPropertyId()
+                );
+            }
 
             rows.add(new MyBookingRow(
                     booking.getId(),
@@ -151,7 +153,7 @@ public class MyBookingsController {
         }
 
         bookingsTable.setItems(FXCollections.observableArrayList(rows));
-        bookingCountLabel.setText(rows.size() + " bookings");
+        bookingCountLabel.setText(rows.size() + " booking(s)");
     }
 
     @FXML
@@ -166,7 +168,7 @@ public class MyBookingsController {
     }
 
     private static class MyBookingRow {
-        private final int bookingId;
+        private final int    bookingId;
         private final String propertyLabel;
         private final String roomLabel;
         private final String priceLabel;
@@ -179,12 +181,12 @@ public class MyBookingsController {
                              String priceLabel,
                              String bookingDate,
                              String status) {
-            this.bookingId = bookingId;
+            this.bookingId     = bookingId;
             this.propertyLabel = propertyLabel;
-            this.roomLabel = roomLabel;
-            this.priceLabel = priceLabel;
-            this.bookingDate = bookingDate;
-            this.status = status;
+            this.roomLabel     = roomLabel;
+            this.priceLabel    = priceLabel;
+            this.bookingDate   = bookingDate;
+            this.status        = status;
         }
     }
 }
