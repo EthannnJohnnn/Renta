@@ -9,98 +9,113 @@
             styleClass="page-container"
             stylesheets="@../styles/styles.css">
 
-    <!-- TOP NAV -->
     <top>
-        <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="16">
+        <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="14">
             <padding><Insets top="14" right="24" bottom="14" left="24"/></padding>
+            <Label text="🏠" style="-fx-font-size: 20px;"/>
             <Label text="Renta" styleClass="nav-brand"/>
-            <Label text="|" styleClass="nav-title" opacity="0.3"/>
+            <Label text="/" style="-fx-text-fill: #475569;"/>
             <Label fx:id="navPropertyName" text="Manage Rooms" styleClass="nav-title"/>
             <Region HBox.hgrow="ALWAYS"/>
             <Button text="← Back to Listings" onAction="#handleBack"
                     styleClass="secondary-button"/>
-            <Button text="Logout" onAction="#handleLogout"
-                    styleClass="danger-button"/>
+            <Button text="Logout" onAction="#handleLogout" styleClass="danger-button"/>
         </HBox>
     </top>
 
-    <!-- MAIN CONTENT -->
     <center>
-        <VBox spacing="24">
-            <padding><Insets top="32" right="40" bottom="32" left="40"/></padding>
+        <ScrollPane fitToWidth="true" styleClass="scroll-pane">
+            <VBox spacing="20">
+                <padding><Insets top="28" right="32" bottom="32" left="32"/></padding>
 
-            <!-- Page Header -->
-            <HBox alignment="CENTER_LEFT" spacing="16">
-                <VBox spacing="4" HBox.hgrow="ALWAYS">
-                    <Label fx:id="propertyNameLabel" text="Property Rooms"
-                           styleClass="screen-title"/>
-                    <Label fx:id="roomCountLabel" text="0 rooms"
-                           styleClass="subtitle"/>
-                </VBox>
-                <Button text="+ Add Room" onAction="#handleAddRoom"
-                        styleClass="primary-button"/>
-            </HBox>
-
-            <!-- Feedback message -->
-            <Label fx:id="messageLabel" text="" styleClass="error-label" wrapText="true"/>
-
-            <!-- Rooms Table -->
-            <TableView fx:id="roomsTable" styleClass="table-view" VBox.vgrow="ALWAYS">
-                <columns>
-                    <TableColumn fx:id="roomNumberColumn" text="Room No." prefWidth="120"/>
-                    <TableColumn fx:id="capacityColumn" text="Capacity" prefWidth="120"/>
-                    <TableColumn fx:id="priceColumn" text="Price / Month" prefWidth="150"/>
-                    <TableColumn fx:id="statusColumn" text="Status" prefWidth="120"/>
-                    <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="180"/>
-                </columns>
-                <placeholder>
-                    <Label text="No rooms added yet. Click '+ Add Room' to get started."
-                           styleClass="subtitle"/>
-                </placeholder>
-            </TableView>
-
-            <!-- Add / Edit Room Form Card -->
-            <VBox fx:id="roomFormCard" styleClass="card" spacing="16">
-                <Label fx:id="formTitleLabel" text="Add New Room" styleClass="card-title"/>
-
-                <HBox spacing="16">
-                    <VBox spacing="6" HBox.hgrow="ALWAYS">
-                        <Label text="Room Number *" styleClass="label-text"/>
-                        <TextField fx:id="roomNumberField"
-                                   promptText="e.g. 101"
-                                   styleClass="input-field"/>
+                <HBox alignment="CENTER_LEFT" spacing="16">
+                    <VBox spacing="4" HBox.hgrow="ALWAYS">
+                        <Label fx:id="propertyNameLabel" text="Property Rooms"
+                               styleClass="screen-title"/>
+                        <Label fx:id="roomCountLabel" text="0 rooms" styleClass="subtitle"/>
                     </VBox>
-                    <VBox spacing="6" HBox.hgrow="ALWAYS">
-                        <Label text="Capacity *" styleClass="label-text"/>
-                        <TextField fx:id="capacityField"
-                                   promptText="e.g. 2"
-                                   styleClass="input-field"/>
-                    </VBox>
-                    <VBox spacing="6" HBox.hgrow="ALWAYS">
-                        <Label text="Price / Month *" styleClass="label-text"/>
-                        <TextField fx:id="priceField"
-                                   promptText="e.g. 5000"
-                                   styleClass="input-field"/>
-                    </VBox>
-                    <VBox spacing="6">
-                        <Label text="Available" styleClass="label-text"/>
-                        <CheckBox fx:id="availableCheckBox" selected="true"
-                                  text="Yes" styleClass="label-text"/>
-                    </VBox>
-                </HBox>
-
-                <Label fx:id="formErrorLabel" text="" styleClass="error-label" wrapText="true"/>
-
-                <HBox spacing="12" alignment="CENTER_RIGHT">
-                    <Button text="Cancel" onAction="#handleCancelForm"
-                            styleClass="secondary-button"/>
-                    <Button fx:id="formSubmitButton" text="Add Room"
-                            onAction="#handleSubmitRoom"
+                    <Button text="+ Add Room" onAction="#handleAddRoom"
                             styleClass="primary-button"/>
                 </HBox>
+
+                <!-- ═══ UX IMPROVEMENT #3: SAFETY CHECK INFO BAR FOR ROOMS ═══ -->
+                <HBox styleClass="card-flat" alignment="CENTER_LEFT" spacing="12">
+                    <Label text="⚠️" style="-fx-font-size: 16px;"/>
+                    <Label text="Safety Check:" styleClass="label-text"/>
+                    <Label text="Rooms with PENDING or APPROVED bookings cannot be deleted. Resolve active bookings first."
+                           styleClass="subtitle" wrapText="true" HBox.hgrow="ALWAYS"/>
+                </HBox>
+
+                <Label fx:id="messageLabel" text="" styleClass="error-label" wrapText="true"/>
+
+                <TableView fx:id="roomsTable" styleClass="table-view" prefHeight="260">
+                    <columns>
+                        <TableColumn fx:id="roomNumberColumn" text="Room No."     prefWidth="120"/>
+                        <TableColumn fx:id="capacityColumn"   text="Capacity"     prefWidth="110"/>
+                        <TableColumn fx:id="priceColumn"      text="Price / Month" prefWidth="140"/>
+                        <TableColumn fx:id="statusColumn"     text="Status"       prefWidth="110"/>
+                        <TableColumn fx:id="actionsColumn"    text="Actions"      prefWidth="180"/>
+                    </columns>
+                    <!-- ═══ UX IMPROVEMENT: FRIENDLY EMPTY STATE ═══ -->
+                    <placeholder>
+                        <VBox alignment="CENTER" spacing="10">
+                            <Label text="🚪" styleClass="empty-state-icon"/>
+                            <Label text="No rooms added yet"
+                                   styleClass="empty-state-title"/>
+                            <Label text="Click '+ Add Room' above to add your first room."
+                                   styleClass="empty-state-sub"/>
+                        </VBox>
+                    </placeholder>
+                </TableView>
+
+                <!-- Add / Edit Room Inline Form -->
+                <VBox fx:id="roomFormCard" styleClass="card" spacing="16">
+                    <Label fx:id="formTitleLabel" text="Add New Room" styleClass="card-title"/>
+
+                    <HBox spacing="16">
+                        <VBox spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="Room Number *" styleClass="label-text"/>
+                            <HBox styleClass="input-wrapper" alignment="CENTER_LEFT">
+                                <TextField fx:id="roomNumberField" promptText="e.g. 101"
+                                           styleClass="input-field" HBox.hgrow="ALWAYS"/>
+                            </HBox>
+                        </VBox>
+                        <VBox spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="Capacity *" styleClass="label-text"/>
+                            <HBox styleClass="input-wrapper" alignment="CENTER_LEFT">
+                                <TextField fx:id="capacityField" promptText="e.g. 2"
+                                           styleClass="input-field" HBox.hgrow="ALWAYS"/>
+                            </HBox>
+                        </VBox>
+                        <VBox spacing="6" HBox.hgrow="ALWAYS">
+                            <!-- ═══ UX IMPROVEMENT #3: CONSISTENT CURRENCY LABEL ═══ -->
+                            <Label text="Price / Month (₱) *" styleClass="label-text"/>
+                            <HBox styleClass="input-wrapper" alignment="CENTER_LEFT">
+                                <Label text="₱" style="-fx-font-size: 14px; -fx-font-weight: bold;
+                                              -fx-text-fill: #64748B; -fx-padding: 0 6 0 0;"/>
+                                <TextField fx:id="priceField" promptText="e.g. 5000"
+                                           styleClass="input-field" HBox.hgrow="ALWAYS"/>
+                            </HBox>
+                        </VBox>
+                        <VBox spacing="6" alignment="CENTER">
+                            <Label text="Available" styleClass="label-text"/>
+                            <CheckBox fx:id="availableCheckBox" selected="true"
+                                      text="Yes" styleClass="check-box"/>
+                        </VBox>
+                    </HBox>
+
+                    <Label fx:id="formErrorLabel" text="" styleClass="error-label" wrapText="true"/>
+
+                    <HBox spacing="12" alignment="CENTER_RIGHT">
+                        <Button text="Cancel" onAction="#handleCancelForm"
+                                styleClass="secondary-button"/>
+                        <Button fx:id="formSubmitButton" text="Add Room"
+                                onAction="#handleSubmitRoom"
+                                styleClass="primary-button"/>
+                    </HBox>
+                </VBox>
+
             </VBox>
-
-        </VBox>
+        </ScrollPane>
     </center>
-
 </BorderPane>

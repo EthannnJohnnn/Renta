@@ -9,49 +9,54 @@
             styleClass="page-container"
             stylesheets="@../styles/styles.css">
 
-    <!-- TOP NAV -->
     <top>
-        <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="16">
+        <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="14">
             <padding><Insets top="14" right="24" bottom="14" left="24"/></padding>
+            <Label text="🏠" style="-fx-font-size: 20px;"/>
             <Label text="Renta" styleClass="nav-brand"/>
-            <Label text="|" styleClass="nav-title" opacity="0.3"/>
+            <Label text="/" style="-fx-text-fill: #475569;"/>
             <Label fx:id="navPropertyName" text="Reviews" styleClass="nav-title"/>
             <Region HBox.hgrow="ALWAYS"/>
-            <Button text="← Back to Property" onAction="#handleBack" styleClass="secondary-button"/>
+            <Button text="← Back to Property" onAction="#handleBack"
+                    styleClass="secondary-button"/>
         </HBox>
     </top>
 
-    <!-- MAIN CONTENT -->
     <center>
         <ScrollPane fitToWidth="true" styleClass="scroll-pane">
-            <VBox spacing="24">
-                <padding><Insets top="32" right="40" bottom="40" left="40"/></padding>
+            <VBox spacing="20">
+                <padding><Insets top="28" right="32" bottom="32" left="32"/></padding>
 
-                <!-- Header -->
-                <VBox spacing="6">
+                <VBox spacing="4">
                     <Label fx:id="propertyNameLabel" text="Property Reviews"
                            styleClass="screen-title"/>
                     <Label fx:id="reviewCountLabel" text="0 reviews"
                            styleClass="subtitle"/>
                 </VBox>
 
-                <!-- Existing Reviews -->
                 <VBox styleClass="card" spacing="12">
-                    <Label text="ALL REVIEWS" styleClass="label-text"/>
-                    <ListView fx:id="reviewListView" styleClass="list-view" prefHeight="260"/>
+                    <Label text="ALL REVIEWS" styleClass="section-label"/>
+                    <ListView fx:id="reviewListView" styleClass="list-view" prefHeight="240">
+                        <placeholder>
+                            <VBox alignment="CENTER" spacing="10">
+                                <Label text="⭐" styleClass="empty-state-icon"/>
+                                <Label text="No reviews yet"
+                                       styleClass="empty-state-title"/>
+                                <Label text="Be the first to share your experience!"
+                                       styleClass="empty-state-sub"/>
+                            </VBox>
+                        </placeholder>
+                    </ListView>
                 </VBox>
 
-                <!-- Submit New Review -->
                 <VBox styleClass="card-flat" spacing="16">
-                    <Label text="Write a Review" styleClass="card-title"/>
+                    <Label text="✍  Write a Review" styleClass="card-title"/>
 
                     <HBox spacing="16" alignment="CENTER_LEFT">
                         <VBox spacing="6">
                             <Label text="Rating *" styleClass="label-text"/>
-                            <ComboBox fx:id="ratingComboBox"
-                                      promptText="Select 1–5"
-                                      styleClass="input-field"
-                                      prefWidth="180"/>
+                            <ComboBox fx:id="ratingComboBox" promptText="Select 1–5"
+                                      styleClass="combo-field" prefWidth="180"/>
                         </VBox>
                     </HBox>
 
@@ -63,7 +68,7 @@
                                   prefHeight="100" wrapText="true"/>
                     </VBox>
 
-                    <Label fx:id="errorLabel" text="" styleClass="error-label" wrapText="true"/>
+                    <Label fx:id="errorLabel"   text="" styleClass="error-label"   wrapText="true"/>
                     <Label fx:id="successLabel" text="" styleClass="success-label" wrapText="true"/>
 
                     <HBox alignment="CENTER_RIGHT">
@@ -75,5 +80,4 @@
             </VBox>
         </ScrollPane>
     </center>
-
 </BorderPane>
