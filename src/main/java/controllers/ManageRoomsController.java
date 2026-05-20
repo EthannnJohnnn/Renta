@@ -58,19 +58,43 @@ public class ManageRoomsController {
                 new SimpleStringProperty(data.getValue().isAvailable() ? "Available" : "Occupied"));
 
         actionsColumn.setCellFactory(col -> new TableCell<>() {
-            private final Button editBtn = new Button("Edit");
-            private final Button deleteBtn = new Button("Delete");
-            private final HBox box = new HBox(8, editBtn, deleteBtn);
+            private final Button editBtn   = new Button("✎  Edit");
+            private final Button deleteBtn = new Button("✕  Delete");
+            private final HBox   box       = new HBox(8, editBtn, deleteBtn);
 
             {
-                editBtn.getStyleClass().add("primary-button");
-                deleteBtn.getStyleClass().add("danger-button");
+                box.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+                box.setPadding(new javafx.geometry.Insets(4, 0, 4, 0));
+
+                editBtn.setStyle(
+                        "-fx-background-color: #EFF6FF;" +
+                                "-fx-text-fill: #2563EB;" +
+                                "-fx-font-size: 12px;" +
+                                "-fx-font-weight: bold;" +
+                                "-fx-background-radius: 8;" +
+                                "-fx-border-color: #BFDBFE;" +
+                                "-fx-border-radius: 8;" +
+                                "-fx-border-width: 1.5;" +
+                                "-fx-padding: 5 14 5 14;" +
+                                "-fx-cursor: hand;"
+                );
+                deleteBtn.setStyle(
+                        "-fx-background-color: #FEF2F2;" +
+                                "-fx-text-fill: #DC2626;" +
+                                "-fx-font-size: 12px;" +
+                                "-fx-font-weight: bold;" +
+                                "-fx-background-radius: 8;" +
+                                "-fx-border-color: #FECACA;" +
+                                "-fx-border-radius: 8;" +
+                                "-fx-border-width: 1.5;" +
+                                "-fx-padding: 5 14 5 14;" +
+                                "-fx-cursor: hand;"
+                );
 
                 editBtn.setOnAction(e -> {
                     Room selected = getTableView().getItems().get(getIndex());
                     ManageRoomsController.this.startEdit(selected);
                 });
-
                 deleteBtn.setOnAction(e -> {
                     Room selected = getTableView().getItems().get(getIndex());
                     handleDelete(selected);
@@ -81,8 +105,36 @@ public class ManageRoomsController {
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
                 setGraphic(empty ? null : box);
+                setStyle("-fx-alignment: CENTER-LEFT;");
             }
         });
+
+        statusColumn.setCellFactory(col -> new TableCell<>() {
+            @Override
+            protected void updateItem(String status, boolean empty) {
+                super.updateItem(status, empty);
+                if (empty || status == null) { setGraphic(null); return; }
+                Label badge = new Label(status);
+                if ("Available".equals(status)) {
+                    badge.setStyle(
+                            "-fx-background-color: #D1FAE5; -fx-text-fill: #065F46;" +
+                                    "-fx-font-size: 11px; -fx-font-weight: bold;" +
+                                    "-fx-padding: 3 10 3 10; -fx-background-radius: 99;"
+                    );
+                } else {
+                    badge.setStyle(
+                            "-fx-background-color: #FEE2E2; -fx-text-fill: #991B1B;" +
+                                    "-fx-font-size: 11px; -fx-font-weight: bold;" +
+                                    "-fx-padding: 3 10 3 10; -fx-background-radius: 99;"
+                    );
+                }
+                setGraphic(badge);
+                setText(null);
+                setContentDisplay(javafx.scene.control.ContentDisplay.GRAPHIC_ONLY);
+                setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+            }
+        });
+
     }
 
     public void setProperty(Property property) {

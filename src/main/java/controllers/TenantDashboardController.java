@@ -1,42 +1,39 @@
 package controllers;
 
 import app.MainApp;
+import dao.BookingDAO;
 import dao.PropertyDAO;
+import dao.RoomDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.geometry.Insets;
+import models.Booking;
 import models.Property;
+import models.Room;
 import models.User;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
-
-import dao.RoomDAO;
-import models.Room;
-import javafx.geometry.Insets;
-
 public class TenantDashboardController {
 
-    @FXML
-    private Label welcomeLabel;
-    @FXML
-    private ListView<Property> propertyListView;
-    @FXML
-    private TextField searchField;
-    @FXML
-    private ComboBox<String> maxPriceFilter;
-    @FXML
-    private CheckBox availableOnlyFilter;
+    @FXML private Label welcomeLabel;
+    @FXML private ListView<Property> propertyListView;
+    @FXML private TextField searchField;
+    @FXML private ComboBox<String> maxPriceFilter;
+    @FXML private CheckBox availableOnlyFilter;
+    @FXML private Label statPropertiesCount;
+    @FXML private Label statBookingsCount;
+    @FXML private Label statReviewsCount;
 
     private final PropertyDAO propertyDAO = new PropertyDAO();
     private final RoomDAO roomDAO = new RoomDAO();
+    private final BookingDAO bookingDAO = new BookingDAO();
     private List<Property> allProperties;
     private List<Property> filteredProperties;
 
@@ -50,6 +47,17 @@ public class TenantDashboardController {
         allProperties = propertyDAO.getAllProperties();
         filteredProperties = allProperties;
         populateList(filteredProperties);
+
+        // Stat counters
+        statPropertiesCount.setText(String.valueOf(allProperties.size()));
+
+        if (user != null) {
+            List<Booking> myBookings = bookingDAO.getBookingsByTenantId(user.getId());
+            statBookingsCount.setText(String.valueOf(myBookings.size()));
+        } else {
+            statBookingsCount.setText("0");
+        }
+        statReviewsCount.setText("★");
 
         searchField.textProperty().addListener((obs, oldVal, newVal) -> handleSearch(newVal));
         maxPriceFilter.setItems(FXCollections.observableArrayList(
@@ -71,7 +79,6 @@ public class TenantDashboardController {
         handleSearch(searchField.getText());
     }
 
-    // Update handleSearch() to also apply price and availability filters.
     private void handleSearch(String keyword) {
         filteredProperties = allProperties.stream()
                 .filter(p -> p.getName().toLowerCase().contains(keyword.toLowerCase())
@@ -83,7 +90,7 @@ public class TenantDashboardController {
     private void populateList(List<Property> properties) {
         ObservableList<Property> items = FXCollections.observableArrayList(properties);
         propertyListView.setItems(items);
-        
+
         propertyListView.setCellFactory(listView -> new ListCell<Property>() {
             @Override
             protected void updateItem(Property property, boolean empty) {
@@ -95,7 +102,7 @@ public class TenantDashboardController {
                     List<Room> rooms = roomDAO.getRoomsByPropertyId(property.getId());
                     double minPrice = rooms.stream().mapToDouble(Room::getPrice).min().orElse(0.0);
                     double maxPrice = rooms.stream().mapToDouble(Room::getPrice).max().orElse(0.0);
-                    
+
                     String priceRangeText;
                     if (rooms.isEmpty()) {
                         priceRangeText = "No rooms configured";
@@ -105,22 +112,22 @@ public class TenantDashboardController {
                         priceRangeText = String.format("₱%,.2f – ₱%,.2f / month", minPrice, maxPrice);
                     }
 
-                    // Modern styled VBox Card for the list row
                     javafx.scene.layout.VBox vbox = new javafx.scene.layout.VBox(4);
                     vbox.setPadding(new Insets(12, 16, 12, 16));
-                    vbox.setStyle("-fx-background-color: white; -fx-background-radius: 8px; -fx-border-color: #E2E8F0; -fx-border-radius: 8px; -fx-cursor: hand;");
-                    
+                    vbox.setStyle("-fx-background-color: white; -fx-background-radius: 8px;" +
+                            "-fx-border-color: #E2E8F0; -fx-border-radius: 8px; -fx-cursor: hand;");
+
                     Label nameLbl = new Label("⌂ " + property.getName());
                     nameLbl.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1E293B;");
-                    
+
                     Label addrLbl = new Label("📍 " + property.getAddress());
                     addrLbl.setStyle("-fx-font-size: 13px; -fx-text-fill: #64748B;");
-                    
+
                     Label priceLbl = new Label(priceRangeText);
-                    priceLbl.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #16A34A; -fx-padding: 4px 0px 0px 0px;");
-                    
+                    priceLbl.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;" +
+                            "-fx-text-fill: #16A34A; -fx-padding: 4px 0px 0px 0px;");
+
                     vbox.getChildren().addAll(nameLbl, addrLbl, priceLbl);
-                    
                     setGraphic(vbox);
                     setStyle("-fx-background-color: transparent; -fx-padding: 4px 8px;");
                 }
@@ -161,4 +168,3 @@ public class TenantDashboardController {
         MainApp.switchTo("views/Login.fxml");
     }
 }
-
