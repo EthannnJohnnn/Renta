@@ -6,6 +6,7 @@ public class Property {
     private String name;
     private String address;
     private String description;
+    private String imageUrl;
 
     public Property() {}
 
@@ -40,7 +41,6 @@ public class Property {
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
 
-    public String getImageUrl() {
-        return null; //temporary
-    }
+    public String getImageUrl() { return imageUrl; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 }

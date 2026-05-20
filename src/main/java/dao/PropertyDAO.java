@@ -12,7 +12,8 @@ public class PropertyDAO {
 
     // CREATE
     public boolean addProperty(Property property) {
-        String sql = "INSERT INTO properties (landlord_id, name, address, description) VALUES (?, ?, ?, ?)";
+        // ADDED image_url and the 5th ?
+        String sql = "INSERT INTO properties (landlord_id, name, address, description, image_url) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseHelper.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -20,6 +21,7 @@ public class PropertyDAO {
             pstmt.setString(2, property.getName());
             pstmt.setString(3, property.getAddress());
             pstmt.setString(4, property.getDescription());
+            pstmt.setString(5, property.getImageUrl()); // NEW LINE
 
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -66,14 +68,16 @@ public class PropertyDAO {
 
     // UPDATE
     public boolean updateProperty(Property property) {
-        String sql = "UPDATE properties SET name = ?, address = ?, description = ? WHERE id = ?";
+        // ADDED image_url = ?
+        String sql = "UPDATE properties SET name = ?, address = ?, description = ?, image_url = ? WHERE id = ?";
         try (Connection conn = DatabaseHelper.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, property.getName());
             pstmt.setString(2, property.getAddress());
             pstmt.setString(3, property.getDescription());
-            pstmt.setInt(4, property.getId());
+            pstmt.setString(4, property.getImageUrl()); // NEW LINE
+            pstmt.setInt(5, property.getId());          // Moved ID to parameter 5
 
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -104,6 +108,7 @@ public class PropertyDAO {
         prop.setName(rs.getString("name"));
         prop.setAddress(rs.getString("address"));
         prop.setDescription(rs.getString("description"));
+        prop.setImageUrl(rs.getString("image_url")); // NEW LINE
         return prop;
     }
 }
