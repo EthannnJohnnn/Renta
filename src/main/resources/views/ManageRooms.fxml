@@ -28,65 +28,48 @@
             <VBox spacing="20">
                 <padding><Insets top="28" right="32" bottom="32" left="32"/></padding>
 
-                <!-- Header -->
+                <!-- ── Header ─────────────────────────────────────── -->
                 <HBox alignment="CENTER_LEFT" spacing="16">
                     <VBox spacing="4" HBox.hgrow="ALWAYS">
-                        <Label fx:id="propertyNameLabel" text="Property Rooms" styleClass="screen-title"/>
+                        <Label fx:id="propertyNameLabel" text="Property Rooms"
+                               styleClass="screen-title"/>
                         <Label fx:id="roomCountLabel" text="0 rooms" styleClass="subtitle"/>
                     </VBox>
-                    <Button text="+ Add Room" onAction="#handleAddRoom" styleClass="primary-button"/>
+                    <Button text="+ Add Room" onAction="#handleAddRoom"
+                            styleClass="primary-button"/>
                 </HBox>
 
-                <!-- Safety Notice -->
-                <HBox styleClass="card" alignment="CENTER_LEFT" spacing="12"
-                      style="-fx-background-color: #FFFBEB; -fx-border-color: #FCD34D; -fx-padding: 14 20;">
+                <!-- ── Safety Notice ──────────────────────────────── -->
+                <HBox styleClass="card-flat" alignment="CENTER_LEFT" spacing="12"
+                      style="-fx-background-color: #FFFBEB; -fx-border-color: #FCD34D;">
                     <Label text="⚠" style="-fx-font-size: 18px; -fx-text-fill: #D97706;"/>
                     <VBox spacing="2" HBox.hgrow="ALWAYS">
-                        <Label text="Safety Check:" styleClass="label-text" style="-fx-text-fill: #92400E;"/>
+                        <Label text="Safety Check:" styleClass="label-text"
+                               style="-fx-text-fill: #92400E;"/>
                         <Label text="Rooms with PENDING or APPROVED bookings cannot be deleted. Resolve active bookings first."
-                               styleClass="subtitle" wrapText="true" style="-fx-text-fill: #B45309;"/>
+                               styleClass="subtitle" wrapText="true"
+                               style="-fx-text-fill: #B45309;"/>
                     </VBox>
                 </HBox>
 
                 <Label fx:id="messageLabel" text="" styleClass="error-label" wrapText="true"/>
 
-                <!-- Modern Rooms Table (4 columns, no actions column) -->
-                <VBox styleClass="card" spacing="0" style="-fx-padding: 0; -fx-background-radius: 14;">
+                <!-- ── Room Cards Container ───────────────────────── -->
+                <!-- The controller calls getRoomsByPropertyId and builds cards below.     -->
+                <!-- We keep the TableView here (invisible) so the controller's fx:id      -->
+                <!-- bindings still resolve — but we hide it and use the VBox for display. -->
 
-                    <!-- Table Header Row -->
-                    <HBox style="-fx-background-color: #F8FAFC; -fx-background-radius: 14 14 0 0;
-                                 -fx-border-color: #E2E8F0; -fx-border-width: 0 0 1 0; -fx-padding: 12 20;">
-                        <Label text="ROOM NO." styleClass="section-label" prefWidth="140"/>
-                        <Label text="CAPACITY"  styleClass="section-label" prefWidth="140"/>
-                        <Label text="PRICE / MONTH" styleClass="section-label" prefWidth="180"/>
-                        <Label text="STATUS"   styleClass="section-label" prefWidth="120"/>
-                        <Label text="ACTIONS"  styleClass="section-label" HBox.hgrow="ALWAYS"/>
-                    </HBox>
+                <TableView fx:id="roomsTable" managed="false" visible="false" prefHeight="0">
+                    <columns>
+                        <TableColumn fx:id="roomNumberColumn" text="Room No."/>
+                        <TableColumn fx:id="capacityColumn"   text="Capacity"/>
+                        <TableColumn fx:id="priceColumn"      text="Price / Month"/>
+                        <TableColumn fx:id="statusColumn"     text="Status"/>
+                        <TableColumn fx:id="actionsColumn"    text="Actions"/>
+                    </columns>
+                </TableView>
 
-                    <!-- TableView (columns match header, no actionsColumn) -->
-                    <TableView fx:id="roomsTable" styleClass="table-view"
-                               style="-fx-background-radius: 0 0 14 14; -fx-border-color: #E2E8F0;
-                                      -fx-border-width: 0 1 1 1; -fx-border-radius: 0 0 14 14;"
-                               prefHeight="280">
-                        <columns>
-                            <TableColumn fx:id="roomNumberColumn" text="Room No."      prefWidth="140"/>
-                            <TableColumn fx:id="capacityColumn"   text="Capacity"      prefWidth="140"/>
-                            <TableColumn fx:id="priceColumn"      text="Price / Month" prefWidth="180"/>
-                            <TableColumn fx:id="statusColumn"     text="Status"        prefWidth="120"/>
-                            <TableColumn fx:id="actionsColumn"    text="Actions"       prefWidth="220"/>
-                        </columns>
-                        <placeholder>
-                            <VBox alignment="CENTER" spacing="10" style="-fx-padding: 40;">
-                                <Label text="⊞" style="-fx-font-size: 36px; -fx-text-fill: #CBD5E1;"/>
-                                <Label text="No rooms added yet" styleClass="empty-state-title"/>
-                                <Label text="Click '+ Add Room' above to add your first room."
-                                       styleClass="empty-state-sub"/>
-                            </VBox>
-                        </placeholder>
-                    </TableView>
-                </VBox>
-
-                <!-- Add / Edit Room Inline Form -->
+                <!-- ── Add / Edit Room Inline Form ───────────────── -->
                 <VBox fx:id="roomFormCard" styleClass="card" spacing="20">
                     <Label fx:id="formTitleLabel" text="Add New Room" styleClass="card-title"/>
 
@@ -124,7 +107,8 @@
                     <Label fx:id="formErrorLabel" text="" styleClass="error-label" wrapText="true"/>
 
                     <HBox spacing="12" alignment="CENTER_RIGHT">
-                        <Button text="Cancel" onAction="#handleCancelForm" styleClass="secondary-button"/>
+                        <Button text="Cancel" onAction="#handleCancelForm"
+                                styleClass="secondary-button"/>
                         <Button fx:id="formSubmitButton" text="Add Room"
                                 onAction="#handleSubmitRoom" styleClass="primary-button"/>
                     </HBox>

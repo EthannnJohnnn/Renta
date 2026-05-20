@@ -5,8 +5,11 @@ import dao.RoomDAO;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import models.Property;
 import models.Room;
@@ -15,29 +18,41 @@ import java.util.List;
 
 public class ManageRoomsController {
 
+    // ── Navbar / header ──────────────────────────────────────────────────────
     @FXML private Label navPropertyName;
     @FXML private Label propertyNameLabel;
     @FXML private Label roomCountLabel;
-    @FXML private TableView<Room> roomsTable;
-    @FXML private TableColumn<Room, String> roomNumberColumn;
-    @FXML private TableColumn<Room, String> capacityColumn;
-    @FXML private TableColumn<Room, String> priceColumn;
-    @FXML private TableColumn<Room, String> statusColumn;
-    @FXML private TableColumn<Room, String> actionsColumn;
-    @FXML private Label messageLabel;
-    @FXML private VBox roomFormCard;
-    @FXML private Label formTitleLabel;
+
+    // ── Hidden TableView — kept so fx:id bindings resolve without error ───────
+    @FXML private TableView<Room>          roomsTable;
+    @FXML private TableColumn<Room,String> roomNumberColumn;
+    @FXML private TableColumn<Room,String> capacityColumn;
+    @FXML private TableColumn<Room,String> priceColumn;
+    @FXML private TableColumn<Room,String> statusColumn;
+    @FXML private TableColumn<Room,String> actionsColumn;
+
+    // ── Card list (rendered dynamically) ────────────────────────────────────
+    // Injected from the parent ScrollPane's VBox — we'll locate it at runtime.
+    private VBox roomCardsContainer;
+
+    // ── Inline add/edit form ─────────────────────────────────────────────────
+    @FXML private VBox     roomFormCard;
+    @FXML private Label    formTitleLabel;
     @FXML private TextField roomNumberField;
     @FXML private TextField capacityField;
     @FXML private TextField priceField;
-    @FXML private CheckBox availableCheckBox;
-    @FXML private Label formErrorLabel;
-    @FXML private Button formSubmitButton;
+    @FXML private CheckBox  availableCheckBox;
+    @FXML private Label    formErrorLabel;
+    @FXML private Button   formSubmitButton;
+
+    // ── Misc ─────────────────────────────────────────────────────────────────
+    @FXML private Label messageLabel;
 
     private final RoomDAO roomDAO = new RoomDAO();
     private Property currentProperty;
-    private Room editingRoom;
+    private Room     editingRoom;
 
+    // ── Lifecycle ─────────────────────────────────────────────────────────────
     @FXML
     public void initialize() {
         if (!SessionManager.getInstance().isLoggedIn()) {
@@ -45,98 +60,34 @@ public class ManageRoomsController {
             return;
         }
 
+        // Hide the legacy table; we never populate it visually
+        if (roomsTable != null) {
+            roomsTable.setVisible(false);
+            roomsTable.setManaged(false);
+        }
+
+        // Wire up minimal cell-value factories so no NPE is thrown internally
+        if (roomNumberColumn != null)
+            roomNumberColumn.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getRoomNumber()));
+        if (capacityColumn != null)
+            capacityColumn.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getCapacity() + " person(s)"));
+        if (priceColumn != null)
+            priceColumn.setCellValueFactory(d -> new SimpleStringProperty("₱" + String.format("%.2f", d.getValue().getPrice())));
+        if (statusColumn != null)
+            statusColumn.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().isAvailable() ? "Available" : "Occupied"));
+
+        // Build the cards VBox and insert it right before the form card in the parent
+        roomCardsContainer = new VBox(16);
+        VBox parent = (VBox) roomFormCard.getParent();
+        int formIdx = parent.getChildren().indexOf(roomFormCard);
+        parent.getChildren().add(formIdx, roomCardsContainer);
+
+        // Hide form until "Add Room" or "Edit" is clicked
         roomFormCard.setVisible(false);
         roomFormCard.setManaged(false);
-
-        roomNumberColumn.setCellValueFactory(data ->
-                new SimpleStringProperty(data.getValue().getRoomNumber()));
-        capacityColumn.setCellValueFactory(data ->
-                new SimpleStringProperty(data.getValue().getCapacity() + " person(s)"));
-        priceColumn.setCellValueFactory(data ->
-                new SimpleStringProperty("₱" + String.format("%.2f", data.getValue().getPrice())));
-        statusColumn.setCellValueFactory(data ->
-                new SimpleStringProperty(data.getValue().isAvailable() ? "Available" : "Occupied"));
-
-        actionsColumn.setCellFactory(col -> new TableCell<>() {
-            private final Button editBtn   = new Button("✎  Edit");
-            private final Button deleteBtn = new Button("✕  Delete");
-            private final HBox   box       = new HBox(8, editBtn, deleteBtn);
-
-            {
-                box.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
-                box.setPadding(new javafx.geometry.Insets(4, 0, 4, 0));
-
-                editBtn.setStyle(
-                        "-fx-background-color: #EFF6FF;" +
-                                "-fx-text-fill: #2563EB;" +
-                                "-fx-font-size: 12px;" +
-                                "-fx-font-weight: bold;" +
-                                "-fx-background-radius: 8;" +
-                                "-fx-border-color: #BFDBFE;" +
-                                "-fx-border-radius: 8;" +
-                                "-fx-border-width: 1.5;" +
-                                "-fx-padding: 5 14 5 14;" +
-                                "-fx-cursor: hand;"
-                );
-                deleteBtn.setStyle(
-                        "-fx-background-color: #FEF2F2;" +
-                                "-fx-text-fill: #DC2626;" +
-                                "-fx-font-size: 12px;" +
-                                "-fx-font-weight: bold;" +
-                                "-fx-background-radius: 8;" +
-                                "-fx-border-color: #FECACA;" +
-                                "-fx-border-radius: 8;" +
-                                "-fx-border-width: 1.5;" +
-                                "-fx-padding: 5 14 5 14;" +
-                                "-fx-cursor: hand;"
-                );
-
-                editBtn.setOnAction(e -> {
-                    Room selected = getTableView().getItems().get(getIndex());
-                    ManageRoomsController.this.startEdit(selected);
-                });
-                deleteBtn.setOnAction(e -> {
-                    Room selected = getTableView().getItems().get(getIndex());
-                    handleDelete(selected);
-                });
-            }
-
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-                setGraphic(empty ? null : box);
-                setStyle("-fx-alignment: CENTER-LEFT;");
-            }
-        });
-
-        statusColumn.setCellFactory(col -> new TableCell<>() {
-            @Override
-            protected void updateItem(String status, boolean empty) {
-                super.updateItem(status, empty);
-                if (empty || status == null) { setGraphic(null); return; }
-                Label badge = new Label(status);
-                if ("Available".equals(status)) {
-                    badge.setStyle(
-                            "-fx-background-color: #D1FAE5; -fx-text-fill: #065F46;" +
-                                    "-fx-font-size: 11px; -fx-font-weight: bold;" +
-                                    "-fx-padding: 3 10 3 10; -fx-background-radius: 99;"
-                    );
-                } else {
-                    badge.setStyle(
-                            "-fx-background-color: #FEE2E2; -fx-text-fill: #991B1B;" +
-                                    "-fx-font-size: 11px; -fx-font-weight: bold;" +
-                                    "-fx-padding: 3 10 3 10; -fx-background-radius: 99;"
-                    );
-                }
-                setGraphic(badge);
-                setText(null);
-                setContentDisplay(javafx.scene.control.ContentDisplay.GRAPHIC_ONLY);
-                setAlignment(javafx.geometry.Pos.CENTER_LEFT);
-            }
-        });
-
     }
 
+    // ── Called after setProperty() from ManageListingsController ─────────────
     public void setProperty(Property property) {
         this.currentProperty = property;
         navPropertyName.setText("Rooms — " + property.getName());
@@ -144,15 +95,109 @@ public class ManageRoomsController {
         loadRooms();
     }
 
+    // ── Load & render room cards ──────────────────────────────────────────────
     private void loadRooms() {
-        if (currentProperty == null) {
+        if (roomCardsContainer == null || currentProperty == null) return;
+        roomCardsContainer.getChildren().clear();
+
+        List<Room> rooms = roomDAO.getRoomsByPropertyId(currentProperty.getId());
+        roomCountLabel.setText(rooms.size() + " room(s)");
+
+        if (rooms.isEmpty()) {
+            VBox empty = new VBox(10);
+            empty.setAlignment(Pos.CENTER);
+            empty.setStyle("-fx-padding: 40;");
+            Label icon  = new Label("⊞");
+            icon.setStyle("-fx-font-size: 32px; -fx-text-fill: #CBD5E1;");
+            Label title = new Label("No rooms added yet");
+            title.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #64748B;");
+            Label sub   = new Label("Click '+ Add Room' above to add your first room.");
+            sub.setStyle("-fx-font-size: 12px; -fx-text-fill: #94A3B8;");
+            empty.getChildren().addAll(icon, title, sub);
+            roomCardsContainer.getChildren().add(empty);
             return;
         }
-        List<Room> rooms = roomDAO.getRoomsByPropertyId(currentProperty.getId());
+
+        for (Room room : rooms) {
+            roomCardsContainer.getChildren().add(createRoomCard(room));
+        }
+
+        // Also keep the hidden table in sync (no visual effect, but keeps model consistent)
         roomsTable.setItems(FXCollections.observableArrayList(rooms));
-        roomCountLabel.setText(rooms.size() + " rooms");
     }
 
+    // ── Card builder ──────────────────────────────────────────────────────────
+    private HBox createRoomCard(Room room) {
+        HBox card = new HBox(16);
+        card.getStyleClass().add("card-flat");
+        card.setAlignment(Pos.CENTER_LEFT);
+
+        // Icon box — colour changes with availability
+        Label icon = new Label("⊞");
+        if (room.isAvailable()) {
+            icon.setStyle("-fx-font-size: 26px; -fx-text-fill: #16A34A;" +
+                    " -fx-background-color: #D1FAE5; -fx-background-radius: 8; -fx-padding: 10 16;");
+        } else {
+            icon.setStyle("-fx-font-size: 26px; -fx-text-fill: #DC2626;" +
+                    " -fx-background-color: #FEE2E2; -fx-background-radius: 8; -fx-padding: 10 16;");
+        }
+
+        // Details column
+        VBox details = new VBox(4);
+
+        // Top row: room number + status badge
+        HBox topRow = new HBox(10);
+        topRow.setAlignment(Pos.CENTER_LEFT);
+        Label roomLbl = new Label("Room " + room.getRoomNumber());
+        roomLbl.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #0F172A;");
+        Label statusBadge = new Label(room.isAvailable() ? "Available" : "Occupied");
+        statusBadge.getStyleClass().add(room.isAvailable() ? "badge-approved" : "badge-rejected");
+        topRow.getChildren().addAll(roomLbl, statusBadge);
+
+        // Secondary info
+        Label infoLbl = new Label(
+                "👥 Capacity: " + room.getCapacity() + " person(s)" +
+                        "    •    💰 ₱" + String.format("%,.2f", room.getPrice()) + " / month"
+        );
+        infoLbl.setStyle("-fx-font-size: 13px; -fx-text-fill: #475569;");
+
+        details.getChildren().addAll(topRow, infoLbl);
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        // Action buttons
+        HBox actions = new HBox(10);
+        actions.setAlignment(Pos.CENTER);
+
+        Button editBtn = new Button("✎  Edit");
+        editBtn.getStyleClass().add("primary-button");
+        editBtn.setStyle("-fx-padding: 8 16; -fx-font-size: 12px;");
+        editBtn.setOnAction(e -> startEdit(room));
+
+        Button deleteBtn = new Button("✕  Delete");
+        deleteBtn.getStyleClass().add("danger-button");
+        deleteBtn.setStyle("-fx-padding: 8 16; -fx-font-size: 12px;");
+        deleteBtn.setOnAction(e -> handleDelete(room));
+
+        actions.getChildren().addAll(editBtn, deleteBtn);
+
+        card.getChildren().addAll(icon, details, spacer, actions);
+        return card;
+    }
+
+    // ── Form visibility helpers ───────────────────────────────────────────────
+    private void showForm() {
+        roomFormCard.setVisible(true);
+        roomFormCard.setManaged(true);
+    }
+
+    private void hideForm() {
+        roomFormCard.setVisible(false);
+        roomFormCard.setManaged(false);
+    }
+
+    // ── FXML actions ─────────────────────────────────────────────────────────
     @FXML
     public void handleAddRoom() {
         editingRoom = null;
@@ -163,10 +208,8 @@ public class ManageRoomsController {
         priceField.clear();
         availableCheckBox.setSelected(true);
         formErrorLabel.setText("");
-        messageLabel.setText("");
-
-        roomFormCard.setVisible(true);
-        roomFormCard.setManaged(true);
+        if (messageLabel != null) messageLabel.setText("");
+        showForm();
     }
 
     @FXML
@@ -176,20 +219,20 @@ public class ManageRoomsController {
             return;
         }
 
-        String roomNumber = roomNumberField.getText().trim();
+        String roomNumber   = roomNumberField.getText().trim();
         String capacityText = capacityField.getText().trim();
-        String priceText = priceField.getText().trim();
+        String priceText    = priceField.getText().trim();
 
         if (roomNumber.isEmpty() || capacityText.isEmpty() || priceText.isEmpty()) {
             formErrorLabel.setText("Please fill in all required fields.");
             return;
         }
 
-        int capacity;
+        int    capacity;
         double price;
         try {
             capacity = Integer.parseInt(capacityText);
-            price = Double.parseDouble(priceText);
+            price    = Double.parseDouble(priceText);
         } catch (NumberFormatException e) {
             formErrorLabel.setText("Capacity and price must be numeric.");
             return;
@@ -197,13 +240,8 @@ public class ManageRoomsController {
 
         boolean success;
         if (editingRoom == null) {
-            Room newRoom = new Room(
-                    currentProperty.getId(),
-                    roomNumber,
-                    capacity,
-                    price,
-                    availableCheckBox.isSelected()
-            );
+            Room newRoom = new Room(currentProperty.getId(), roomNumber, capacity, price,
+                    availableCheckBox.isSelected());
             success = roomDAO.addRoom(newRoom);
         } else {
             editingRoom.setRoomNumber(roomNumber);
@@ -218,20 +256,17 @@ public class ManageRoomsController {
             return;
         }
 
-        formErrorLabel.setText("");
-        messageLabel.setText("");
-        roomFormCard.setVisible(false);
-        roomFormCard.setManaged(false);
+        hideForm();
         loadRooms();
     }
 
     @FXML
     public void handleCancelForm() {
         formErrorLabel.setText("");
-        roomFormCard.setVisible(false);
-        roomFormCard.setManaged(false);
+        hideForm();
     }
 
+    // ── Triggered by Edit button on a card ───────────────────────────────────
     private void startEdit(Room room) {
         editingRoom = room;
         formTitleLabel.setText("Edit Room");
@@ -241,12 +276,11 @@ public class ManageRoomsController {
         priceField.setText(String.valueOf(room.getPrice()));
         availableCheckBox.setSelected(room.isAvailable());
         formErrorLabel.setText("");
-        messageLabel.setText("");
-
-        roomFormCard.setVisible(true);
-        roomFormCard.setManaged(true);
+        if (messageLabel != null) messageLabel.setText("");
+        showForm();
     }
 
+    // ── Triggered by Delete button on a card ─────────────────────────────────
     private void handleDelete(Room room) {
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
         confirm.setTitle("Delete Room");
@@ -257,10 +291,11 @@ public class ManageRoomsController {
             if (response == ButtonType.OK) {
                 boolean success = roomDAO.deleteRoom(room.getId());
                 if (!success) {
-                    messageLabel.setText("Failed to delete room.");
+                    if (messageLabel != null)
+                        messageLabel.setText("Failed to delete room.");
                     return;
                 }
-                messageLabel.setText("");
+                if (messageLabel != null) messageLabel.setText("");
                 loadRooms();
             }
         });

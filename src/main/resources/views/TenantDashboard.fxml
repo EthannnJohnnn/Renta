@@ -54,7 +54,7 @@
                                 <Label text="⌂" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2563EB;"/>
                             </VBox>
                             <VBox spacing="2">
-                                <Label text="Properties Available" styleClass="stat-label"/>
+                                <Label text="Properties Available" style="-fx-font-size: 12px; -fx-text-fill: #2563EB; -fx-font-weight: bold;"/>
                             </VBox>
                         </HBox>
                         <Label fx:id="statPropertiesCount" text="0" styleClass="stat-number" style="-fx-font-size: 32px;"/>
@@ -66,10 +66,10 @@
                                 <Label text="☰" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #16A34A;"/>
                             </VBox>
                             <VBox spacing="2">
-                                <Label text="My Bookings" styleClass="stat-label"/>
+                                <Label text="My Bookings" style="-fx-font-size: 12px; -fx-text-fill: #16A34A; -fx-font-weight: bold;"/>
                             </VBox>
                         </HBox>
-                        <Label fx:id="statBookingsCount" text="0" styleClass="stat-number" style="-fx-font-size: 32px;"/>
+                        <Label fx:id="statBookingsCount" text="0" styleClass="stat-number" style="-fx-font-size: 32px; -fx-text-fill: #16A34A;"/>
                     </VBox>
 
                     <VBox styleClass="stat-card" spacing="10" HBox.hgrow="ALWAYS">
@@ -78,10 +78,10 @@
                                 <Label text="★" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #D97706;"/>
                             </VBox>
                             <VBox spacing="2">
-                                <Label text="Leave Reviews" styleClass="stat-label"/>
+                                <Label text="Leave Reviews" style="-fx-font-size: 12px; -fx-text-fill: #D97706; -fx-font-weight: bold;"/>
                             </VBox>
                         </HBox>
-                        <Label fx:id="statReviewsCount" text="★" styleClass="stat-number" style="-fx-font-size: 32px;"/>
+                        <Label fx:id="statReviewsCount" text="★" styleClass="stat-number" style="-fx-font-size: 32px; -fx-text-fill: #D97706;"/>
                     </VBox>
                 </HBox>
 
