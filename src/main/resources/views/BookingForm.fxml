@@ -12,7 +12,7 @@
     <top>
         <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="14">
             <padding><Insets top="14" right="24" bottom="14" left="24"/></padding>
-            <Label text="🏠" style="-fx-font-size: 20px;"/>
+            <Label text="⌂" style="-fx-font-size: 20px;"/>
             <Label text="Renta" styleClass="nav-brand"/>
             <Label text="/" style="-fx-text-fill: #475569;"/>
             <Label text="Book a Room" styleClass="nav-title"/>
@@ -76,7 +76,7 @@
                     <!-- Info note about booking status -->
                     <HBox styleClass="card-flat" alignment="CENTER_LEFT" spacing="10"
                           style="-fx-background-color: #EFF6FF; -fx-border-color: #BFDBFE;">
-                        <Label text="ℹ️" style="-fx-font-size: 14px;"/>
+                        <Label text="i" style="-fx-font-size: 14px;"/>
                         <Label text="Your booking will be submitted as PENDING. The landlord will review and approve or reject your request."
                                styleClass="subtitle" wrapText="true" HBox.hgrow="ALWAYS"/>
                     </HBox>
@@ -86,7 +86,7 @@
                     <HBox spacing="12" alignment="CENTER_RIGHT">
                         <Button text="Cancel" onAction="#handleCancel"
                                 styleClass="secondary-button"/>
-                        <Button text="✅  Confirm Booking" onAction="#handleSubmit"
+                        <Button text="✓  Confirm Booking" onAction="#handleSubmit"
                                 styleClass="primary-button"/>
                     </HBox>
                 </VBox>

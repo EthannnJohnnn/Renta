@@ -12,7 +12,7 @@
     <top>
         <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="14">
             <padding><Insets top="14" right="24" bottom="14" left="24"/></padding>
-            <Label text="🏠" style="-fx-font-size: 20px;"/>
+            <Label text="⌂" style="-fx-font-size: 20px;"/>
             <Label text="Renta" styleClass="nav-brand"/>
             <Label text="/" style="-fx-text-fill: #475569;"/>
             <Label fx:id="navPropertyName" text="Reviews" styleClass="nav-title"/>
@@ -39,7 +39,7 @@
                     <ListView fx:id="reviewListView" styleClass="list-view" prefHeight="240">
                         <placeholder>
                             <VBox alignment="CENTER" spacing="10">
-                                <Label text="⭐" styleClass="empty-state-icon"/>
+                                <Label text="★" styleClass="empty-state-icon"/>
                                 <Label text="No reviews yet"
                                        styleClass="empty-state-title"/>
                                 <Label text="Be the first to share your experience!"
@@ -50,7 +50,7 @@
                 </VBox>
 
                 <VBox styleClass="card-flat" spacing="16">
-                    <Label text="✍  Write a Review" styleClass="card-title"/>
+                    <Label text="✎  Write a Review" styleClass="card-title"/>
 
                     <HBox spacing="16" alignment="CENTER_LEFT">
                         <VBox spacing="6">

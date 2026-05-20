@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.shape.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
@@ -13,7 +14,7 @@
     <top>
         <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="14">
             <padding><Insets top="14" right="24" bottom="14" left="24"/></padding>
-            <Label text="🏠" style="-fx-font-size: 20px;"/>
+            <Label text="⌂" style="-fx-font-size: 20px;"/>
             <Label text="Renta" styleClass="nav-brand"/>
             <Label text="/" style="-fx-text-fill: #475569;"/>
             <Label fx:id="navPropertyName" text="Property Detail" styleClass="nav-title"/>
@@ -32,24 +33,18 @@
                 <!-- ═══ PROPERTY INFO CARD ═══ -->
                 <VBox styleClass="card" spacing="16">
 
-                    <!-- ═══ UX IMPROVEMENT #3 (TENANT VISUALS): PROPERTY IMAGE ═══ -->
-                    <!-- Controller: PropertyDetailController.setProperty() loads       -->
-                    <!-- property.getImageUrl() into propertyImageView via             -->
-                    <!-- new Image(url, true) — show/hide based on null check.         -->
-                    <!-- imageContainer hidden by default; controller shows it if url  -->
-                    <!-- is not null and not empty.                                    -->
-                    <StackPane fx:id="imageContainer"
-                               visible="false" managed="false"
-                               style="-fx-background-color: #F1F5F9;
-                                      -fx-background-radius: 10;"
-                               prefHeight="200">
-                        <ImageView fx:id="propertyImageView"
-                                   fitWidth="720" fitHeight="200"
-                                   preserveRatio="true"
-                                   smooth="true"/>
-                        <!-- Fallback shown if image fails to load -->
-                        <Label fx:id="imageErrorLabel" text="📷  Image unavailable"
-                               styleClass="subtitle" visible="false"/>
+                    <!-- PROPERTY IMAGE PREVIEW -->
+                    <StackPane fx:id="imageContainer" visible="false" managed="false"
+                               prefHeight="300" style="-fx-background-color: #E2E8F0; -fx-background-radius: 12;"
+                               maxWidth="Infinity">
+                        <clip>
+                            <!-- Rounds the corners of the ImageView -->
+                            <Rectangle width="800" height="300" arcWidth="24" arcHeight="24"/>
+                        </clip>
+                        <ImageView fx:id="propertyImageView" fitWidth="800" fitHeight="300"
+                                   preserveRatio="true" StackPane.alignment="CENTER"/>
+                        <Label fx:id="imageErrorLabel" text="⚠ Image could not be loaded"
+                               visible="false" style="-fx-text-fill: #EF4444; -fx-font-weight: bold;"/>
                     </StackPane>
 
                     <Label fx:id="propertyNameLabel" text="Property Name"
@@ -75,23 +70,21 @@
                     <HBox alignment="CENTER_LEFT" spacing="16">
                         <Label text="Available Rooms" styleClass="section-title"
                                HBox.hgrow="ALWAYS"/>
-                        <Button fx:id="bookButton" text="📋  Book Selected Room"
+                        <Button fx:id="bookButton" text="☰  Book Selected Room"
                                 onAction="#handleBook" styleClass="primary-button"
                                 disable="true"/>
                     </HBox>
 
                     <TableView fx:id="roomsTable" styleClass="table-view" prefHeight="220">
                         <columns>
-                            <!-- ═══ UX IMPROVEMENT: CONSISTENT CURRENCY IN HEADER ═══ -->
                             <TableColumn fx:id="roomNumberColumn" text="Room"           prefWidth="100"/>
                             <TableColumn fx:id="capacityColumn"   text="Capacity"       prefWidth="110"/>
                             <TableColumn fx:id="priceColumn"      text="Price / Month (₱)" prefWidth="160"/>
                             <TableColumn fx:id="availableColumn"  text="Status"         prefWidth="120"/>
                         </columns>
-                        <!-- ═══ UX IMPROVEMENT: FRIENDLY EMPTY STATE ═══ -->
                         <placeholder>
                             <VBox alignment="CENTER" spacing="10">
-                                <Label text="🚪" styleClass="empty-state-icon"/>
+                                <Label text="⊞" styleClass="empty-state-icon"/>
                                 <Label text="No rooms listed for this property"
                                        styleClass="empty-state-title"/>
                                 <Label text="The landlord has not added any rooms yet."
@@ -109,7 +102,7 @@
                     <ListView fx:id="reviewsListView" styleClass="list-view" prefHeight="160">
                         <placeholder>
                             <VBox alignment="CENTER" spacing="8">
-                                <Label text="⭐" styleClass="empty-state-icon"/>
+                                <Label text="★" styleClass="empty-state-icon"/>
                                 <Label text="No reviews yet"
                                        styleClass="empty-state-title"/>
                                 <Label text="Be the first to leave a review below."
@@ -121,7 +114,7 @@
 
                 <!-- ═══ LEAVE A REVIEW ═══ -->
                 <VBox styleClass="card-flat" spacing="16">
-                    <Label text="✍  Leave a Review" styleClass="card-title"/>
+                    <Label text="✎  Leave a Review" styleClass="card-title"/>
                     <HBox spacing="16" alignment="CENTER_LEFT">
                         <VBox spacing="6">
                             <Label text="Rating" styleClass="label-text"/>

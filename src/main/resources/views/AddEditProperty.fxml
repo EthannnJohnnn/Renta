@@ -12,7 +12,7 @@
     <top>
         <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="14">
             <padding><Insets top="14" right="24" bottom="14" left="24"/></padding>
-            <Label text="🏠" style="-fx-font-size: 20px;"/>
+            <Label text="⌂" style="-fx-font-size: 20px;"/>
             <Label text="Renta" styleClass="nav-brand"/>
             <Label text="/" style="-fx-text-fill: #475569;"/>
             <Label fx:id="screenTitleLabel" text="Add New Property" styleClass="nav-title"/>
@@ -66,16 +66,13 @@
                     </VBox>
 
                     <!-- ═══ UX IMPROVEMENT #3 (TENANT VISUALS): IMAGE URL FIELD ═══ -->
-                    <!-- Controller: AddEditPropertyController.setProperty() must also   -->
-                    <!-- populate imageUrlField; handleSubmit() must read and save it.   -->
-                    <!-- Backend: PropertyDAO needs image_url column (schema change).    -->
                     <VBox spacing="6">
                         <HBox alignment="CENTER_LEFT" spacing="8">
                             <Label text="Property Photo URL" styleClass="label-text"/>
                             <Label text="(optional)" styleClass="subtitle"/>
                         </HBox>
                         <HBox styleClass="input-wrapper" alignment="CENTER_LEFT">
-                            <Label text="🔗" style="-fx-font-size: 14px; -fx-padding: 0 8 0 0;"/>
+                            <Label text="☍" style="-fx-font-size: 14px; -fx-padding: 0 8 0 0;"/>
                             <TextField fx:id="imageUrlField"
                                        promptText="Paste an image link (e.g. https://i.imgur.com/example.jpg)"
                                        styleClass="input-field" HBox.hgrow="ALWAYS"/>

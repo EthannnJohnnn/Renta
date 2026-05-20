@@ -12,7 +12,7 @@
     <top>
         <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="14">
             <padding><Insets top="14" right="24" bottom="14" left="24"/></padding>
-            <Label text="🏠" style="-fx-font-size: 20px;"/>
+            <Label text="⌂" style="-fx-font-size: 20px;"/>
             <Label text="Renta" styleClass="nav-brand"/>
             <Label text="/" style="-fx-text-fill: #475569;"/>
             <Label text="Booking Requests" styleClass="nav-title"/>
@@ -36,28 +36,23 @@
                 </VBox>
             </HBox>
 
-            <!-- ═══ UX IMPROVEMENT: ACTIONS GUIDE ═══ -->
-            <!-- Explains what each button does at a glance -->
+            <!-- ═══ ACTIONS GUIDE ═══ -->
             <HBox styleClass="card-flat" alignment="CENTER_LEFT" spacing="16">
                 <Label text="Actions Guide" styleClass="label-text"/>
-                <Label text="✅ Approve" styleClass="subtitle"/>
+                <Label text="✓ Approve" styleClass="subtitle"/>
                 <Label text="→ Confirms booking and marks room unavailable" styleClass="subtitle"/>
                 <Label text="  |  " styleClass="subtitle"/>
-                <Label text="❌ Reject" styleClass="subtitle"/>
+                <Label text="✕ Reject" styleClass="subtitle"/>
                 <Label text="→ Declines and restores room availability" styleClass="subtitle"/>
                 <Label text="  |  " styleClass="subtitle"/>
                 <!-- NEW: End Tenancy explanation -->
-                <Label text="🏁 End Tenancy" styleClass="subtitle"/>
+                <Label text="⚐ End Tenancy" styleClass="subtitle"/>
                 <Label text="→ Marks booking complete, room becomes available again" styleClass="subtitle"/>
             </HBox>
 
             <Label fx:id="messageLabel" text="" styleClass="error-label" wrapText="true"/>
 
-            <!-- ═══ UX IMPROVEMENT #2 (LANDLORD): END TENANCY COLUMN ADDED ═══ -->
-            <!-- actionsColumn cell factory in controller shows:                    -->
-            <!--   PENDING  → Approve + Reject buttons                             -->
-            <!--   APPROVED → "End Tenancy" button only                            -->
-            <!--   REJECTED / CANCELLED / COMPLETED → no actions (greyed out dash) -->
+            <!-- ═══ BOOKINGS TABLE ═══ -->
             <TableView fx:id="bookingsTable" styleClass="table-view" VBox.vgrow="ALWAYS">
                 <columns>
                     <TableColumn fx:id="tenantColumn"   text="Tenant"       prefWidth="140"/>
@@ -65,13 +60,12 @@
                     <TableColumn fx:id="roomColumn"     text="Room"         prefWidth="90"/>
                     <TableColumn fx:id="dateColumn"     text="Booking Date" prefWidth="130"/>
                     <TableColumn fx:id="statusColumn"   text="Status"       prefWidth="120"/>
-                    <!-- Actions column handles: Approve/Reject for PENDING, End Tenancy for APPROVED -->
+                    <!-- Expanded width to 200 for action buttons -->
                     <TableColumn fx:id="actionsColumn"  text="Actions"      prefWidth="200"/>
                 </columns>
-                <!-- ═══ UX IMPROVEMENT: FRIENDLY EMPTY STATE ═══ -->
                 <placeholder>
                     <VBox alignment="CENTER" spacing="10">
-                        <Label text="📩" styleClass="empty-state-icon"/>
+                        <Label text="✉" styleClass="empty-state-icon"/>
                         <Label text="No booking requests yet"
                                styleClass="empty-state-title"/>
                         <Label text="When tenants submit bookings for your properties, they will appear here."

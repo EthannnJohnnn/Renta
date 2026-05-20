@@ -12,7 +12,7 @@
     <top>
         <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="14">
             <padding><Insets top="14" right="24" bottom="14" left="24"/></padding>
-            <Label text="🏠" style="-fx-font-size: 20px;"/>
+            <Label text="⌂" style="-fx-font-size: 20px;"/>
             <Label text="Renta" styleClass="nav-brand"/>
             <Label text="/" style="-fx-text-fill: #475569;"/>
             <Label text="Browse Properties" styleClass="nav-title"/>
@@ -40,7 +40,7 @@
             <VBox styleClass="filter-bar" spacing="14">
                 <!-- Search Row -->
                 <HBox styleClass="input-wrapper" alignment="CENTER_LEFT">
-                    <Label text="🔍" style="-fx-font-size: 15px; -fx-padding: 0 8 0 0;"/>
+                    <Label text="⌕" style="-fx-font-size: 15px; -fx-padding: 0 8 0 0;"/>
                     <TextField fx:id="searchField"
                                promptText="Search by property name or address..."
                                styleClass="input-field" HBox.hgrow="ALWAYS"/>
@@ -83,7 +83,7 @@
                 <!-- ═══ UX IMPROVEMENT #2: FRIENDLY EMPTY STATE ═══ -->
                 <placeholder>
                     <VBox alignment="CENTER" spacing="10">
-                        <Label text="🏘" styleClass="empty-state-icon"/>
+                        <Label text="⌂" styleClass="empty-state-icon"/>
                         <Label text="No properties match your search"
                                styleClass="empty-state-title"/>
                         <Label text="Try a different name, location, or remove your price filter."

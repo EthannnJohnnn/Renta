@@ -12,7 +12,7 @@
     <top>
         <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="14">
             <padding><Insets top="14" right="24" bottom="14" left="24"/></padding>
-            <Label text="🏠" style="-fx-font-size: 20px;"/>
+            <Label text="⌂" style="-fx-font-size: 20px;"/>
             <Label text="Renta" styleClass="nav-brand"/>
             <Label text="/" style="-fx-text-fill: #475569;"/>
             <Label fx:id="navPropertyName" text="Manage Rooms" styleClass="nav-title"/>
@@ -40,7 +40,7 @@
 
                 <!-- ═══ UX IMPROVEMENT #3: SAFETY CHECK INFO BAR FOR ROOMS ═══ -->
                 <HBox styleClass="card-flat" alignment="CENTER_LEFT" spacing="12">
-                    <Label text="⚠️" style="-fx-font-size: 16px;"/>
+                    <Label text="⚠" style="-fx-font-size: 16px;"/>
                     <Label text="Safety Check:" styleClass="label-text"/>
                     <Label text="Rooms with PENDING or APPROVED bookings cannot be deleted. Resolve active bookings first."
                            styleClass="subtitle" wrapText="true" HBox.hgrow="ALWAYS"/>
@@ -59,7 +59,7 @@
                     <!-- ═══ UX IMPROVEMENT: FRIENDLY EMPTY STATE ═══ -->
                     <placeholder>
                         <VBox alignment="CENTER" spacing="10">
-                            <Label text="🚪" styleClass="empty-state-icon"/>
+                            <Label text="⊞" styleClass="empty-state-icon"/>
                             <Label text="No rooms added yet"
                                    styleClass="empty-state-title"/>
                             <Label text="Click '+ Add Room' above to add your first room."

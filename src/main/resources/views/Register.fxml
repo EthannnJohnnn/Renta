@@ -1,107 +1,99 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.*?>
-<?import javafx.geometry.Insets?>
-<?import javafx.collections.FXCollections?>
-<?import java.lang.String?>
 
-<StackPane xmlns="http://javafx.com/javafx"
-           xmlns:fx="http://javafx.com/fxml"
-           fx:controller="controllers.RegisterController"
-           styleClass="form-container"
-           stylesheets="@../styles/styles.css">
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+
+<StackPane styleClass="form-container" stylesheets="@../styles/styles.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.RegisterController">
 
     <!-- Decorative circles -->
-    <Circle radius="120" fill="#BFDBFE" opacity="0.25" translateX="-340" translateY="-200"/>
-    <Circle radius="80"  fill="#93C5FD" opacity="0.20" translateX="340"  translateY="220"/>
-    <Circle radius="60"  fill="#BFDBFE" opacity="0.18" translateX="280"  translateY="-240"/>
-    <Circle radius="100" fill="#DBEAFE" opacity="0.22" translateX="-300" translateY="230"/>
+    <Circle fill="#BFDBFE" opacity="0.25" radius="120" translateX="-340" translateY="-200" />
+    <Circle fill="#93C5FD" opacity="0.20" radius="80" translateX="340" translateY="220" />
+    <Circle fill="#BFDBFE" opacity="0.18" radius="60" translateX="280" translateY="-240" />
+    <Circle fill="#DBEAFE" opacity="0.22" radius="100" translateX="-300" translateY="230" />
 
-    <ScrollPane fitToWidth="true" styleClass="scroll-pane"
-                style="-fx-background-color: transparent; -fx-background: transparent;">
+    <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;" styleClass="scroll-pane">
         <VBox alignment="CENTER" style="-fx-padding: 40 0 40 0;">
 
-            <VBox maxWidth="440" spacing="0" alignment="TOP_LEFT"
-                  style="-fx-background-color: white; -fx-background-radius: 18;
-                         -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 28, 0, 0, 6);
-                         -fx-padding: 36 40 32 40;">
+            <VBox alignment="TOP_LEFT" maxWidth="440" spacing="0" style="-fx-background-color: white; -fx-background-radius: 18;                          -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 28, 0, 0, 6);                          -fx-padding: 36 40 32 40;">
 
                 <!-- Header -->
                 <HBox alignment="CENTER_LEFT" spacing="14">
                     <VBox spacing="2" HBox.hgrow="ALWAYS">
-                        <Label text="Create Account"
-                               style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
-                        <Label text="Join Renta today"
-                               style="-fx-font-size: 13px; -fx-text-fill: #64748B;"/>
+                        <Label style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #0F172A;" text="Create Account" />
                     </VBox>
                     <StackPane style="-fx-background-color: #2563EB; -fx-background-radius: 12; -fx-padding: 10;">
-                        <Label text="🏠" style="-fx-font-size: 22px;"/>
+                        <Label style="-fx-font-size: 22px;" text="⌂" />
                     </StackPane>
                 </HBox>
+                  <Label style="-fx-font-size: 13px; -fx-text-fill: #64748B;" text="Join Renta today" />
 
-                <Region prefHeight="24"/>
+                <Region prefHeight="24" />
 
                 <!-- Username -->
-                <Label text="Username" styleClass="label-text">
-                    <VBox.margin><Insets bottom="6"/></VBox.margin>
+                <Label styleClass="label-text" text="Username">
+                    <VBox.margin><Insets bottom="6" /></VBox.margin>
                 </Label>
-                <HBox styleClass="input-wrapper" alignment="CENTER_LEFT">
-                    <TextField fx:id="usernameField" promptText="Choose a username"
-                               styleClass="input-field" HBox.hgrow="ALWAYS"/>
+                <HBox alignment="CENTER_LEFT" styleClass="input-wrapper">
+                    <TextField fx:id="usernameField" promptText="Choose a username" styleClass="input-field" HBox.hgrow="ALWAYS" />
                 </HBox>
 
                 <!-- Password -->
-                <Label text="Password" styleClass="label-text">
-                    <VBox.margin><Insets top="14" bottom="6"/></VBox.margin>
+                <Label styleClass="label-text" text="Password">
+                    <VBox.margin><Insets bottom="6" top="14" /></VBox.margin>
                 </Label>
-                <HBox styleClass="input-wrapper" alignment="CENTER_LEFT">
-                    <PasswordField fx:id="passwordField" promptText="At least 8 characters"
-                                   styleClass="input-field" HBox.hgrow="ALWAYS"/>
+                <HBox alignment="CENTER_LEFT" styleClass="input-wrapper">
+                    <PasswordField fx:id="passwordField" promptText="At least 8 characters" styleClass="input-field" HBox.hgrow="ALWAYS" />
                 </HBox>
 
                 <!-- Confirm Password -->
-                <Label text="Confirm Password" styleClass="label-text">
-                    <VBox.margin><Insets top="14" bottom="6"/></VBox.margin>
+                <Label styleClass="label-text" text="Confirm Password">
+                    <VBox.margin><Insets bottom="6" top="14" /></VBox.margin>
                 </Label>
-                <HBox styleClass="input-wrapper" alignment="CENTER_LEFT">
-                    <PasswordField fx:id="confirmPasswordField" promptText="Re-enter your password"
-                                   styleClass="input-field" HBox.hgrow="ALWAYS"/>
+                <HBox alignment="CENTER_LEFT" styleClass="input-wrapper">
+                    <PasswordField fx:id="confirmPasswordField" promptText="Re-enter your password" styleClass="input-field" HBox.hgrow="ALWAYS" />
                 </HBox>
 
                 <!-- Role -->
-                <Label text="I am a..." styleClass="label-text">
-                    <VBox.margin><Insets top="14" bottom="6"/></VBox.margin>
+                <Label styleClass="label-text" text="I am a...">
+                    <VBox.margin><Insets bottom="6" top="14" /></VBox.margin>
                 </Label>
-                <ComboBox fx:id="roleComboBox" promptText="Select your role"
-                          styleClass="combo-field" maxWidth="Infinity">
+                <ComboBox fx:id="roleComboBox" maxWidth="Infinity" promptText="Select your role" styleClass="combo-field">
                     <items>
                         <FXCollections fx:factory="observableArrayList">
-                            <String fx:value="TENANT"/>
-                            <String fx:value="LANDLORD"/>
+                            <String fx:value="TENANT" />
+                            <String fx:value="LANDLORD" />
                         </FXCollections>
                     </items>
                 </ComboBox>
 
                 <!-- Error -->
-                <Label fx:id="errorLabel" text="" styleClass="error-label" wrapText="true">
-                    <VBox.margin><Insets top="10"/></VBox.margin>
+                <Label fx:id="errorLabel" styleClass="error-label" text="" wrapText="true">
+                    <VBox.margin><Insets top="10" /></VBox.margin>
                 </Label>
 
                 <!-- Submit -->
-                <Button text="Create Account" onAction="#handleRegister"
-                        styleClass="primary-button" maxWidth="Infinity">
-                    <VBox.margin><Insets top="20"/></VBox.margin>
+                <Button maxWidth="Infinity" onAction="#handleRegister" styleClass="primary-button" text="Create Account">
+                    <VBox.margin><Insets top="20" /></VBox.margin>
                 </Button>
 
                 <!-- Login link -->
                 <HBox alignment="CENTER" spacing="4">
-                    <VBox.margin><Insets top="16"/></VBox.margin>
-                    <Label text="Already have an account?"
-                           style="-fx-font-size: 13px; -fx-text-fill: #64748B;"/>
-                    <Hyperlink text="Sign in" onAction="#goToLogin"
-                               style="-fx-font-size: 13px; -fx-font-weight: bold;
-                                      -fx-text-fill: #2563EB; -fx-border-color: transparent;"/>
+                    <VBox.margin><Insets top="16" /></VBox.margin>
+                    <Label style="-fx-font-size: 13px; -fx-text-fill: #64748B;" text="Already have an account?" />
+                    <Hyperlink onAction="#goToLogin" style="-fx-font-size: 13px; -fx-font-weight: bold;                                       -fx-text-fill: #2563EB; -fx-border-color: transparent;" text="Sign in" />
                 </HBox>
 
             </VBox>
