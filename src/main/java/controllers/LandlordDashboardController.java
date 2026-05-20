@@ -23,6 +23,10 @@ public class LandlordDashboardController {
     @FXML private Label pendingBannerTitle;
     @FXML private Label pendingBannerSub;
     @FXML private Label pendingCountStat;
+    @FXML private HBox pendingBanner;
+    @FXML private Label pendingBannerTitle;
+    @FXML private Label pendingBannerSub;
+    @FXML private Label pendingCountStat;
 
     private final PropertyDAO propertyDAO = new PropertyDAO();
 
