@@ -14,9 +14,9 @@
     <top>
         <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="14">
             <padding><Insets top="14" right="24" bottom="14" left="24"/></padding>
-            <Label text="⌂" style="-fx-font-size: 20px;"/>
+            <Label text="⌂" style="-fx-font-size: 20px; -fx-text-fill: white;"/>
             <Label text="Renta" styleClass="nav-brand"/>
-            <Label text="/" style="-fx-text-fill: #475569;"/>
+            <Label text="/" style="-fx-text-fill: rgba(255,255,255,0.6);"/>
             <Label fx:id="navPropertyName" text="Property Detail" styleClass="nav-title"/>
             <Region HBox.hgrow="ALWAYS"/>
             <Button text="← Back to Listings" onAction="#handleBack"

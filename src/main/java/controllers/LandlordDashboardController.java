@@ -3,13 +3,13 @@ package controllers;
 import app.MainApp;
 import dao.BookingDAO;
 import dao.PropertyDAO;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import models.Property;
 import models.User;
 
@@ -18,7 +18,7 @@ import java.util.List;
 public class LandlordDashboardController {
 
     @FXML private Label welcomeLabel;
-    @FXML private ListView<String> listingsView;
+    @FXML private VBox listingsContainer;
     @FXML private HBox pendingBanner;
     @FXML private Label pendingBannerTitle;
     @FXML private Label pendingBannerSub;
@@ -35,18 +35,15 @@ public class LandlordDashboardController {
             welcomeLabel.setText("Welcome, " + user.getUsername());
             loadListings(user.getId());
 
-            // Get total pending bookings using the newly added backend method
             int pendingCount = bookingDAO.countPendingByLandlordId(user.getId());
             pendingCountStat.setText(String.valueOf(pendingCount));
 
-            // Update UI Based on Pending Count
             if (pendingCount > 0) {
-                pendingBannerTitle.setText("⚠️ You have " + pendingCount + " pending booking request(s)!");
+                pendingBannerTitle.setText("[!] You have " + pendingCount + " pending booking request(s)!");
                 pendingBannerSub.setText("Review and respond to keep your tenants informed.");
                 pendingBanner.setVisible(true);
                 pendingBanner.setManaged(true);
             } else {
-                // If 0, hide the banner entirely
                 pendingBanner.setVisible(false);
                 pendingBanner.setManaged(false);
             }
@@ -54,12 +51,45 @@ public class LandlordDashboardController {
     }
 
     private void loadListings(int landlordId) {
+        listingsContainer.getChildren().clear();
         List<Property> properties = propertyDAO.getPropertiesByLandlordId(landlordId);
-        ObservableList<String> items = FXCollections.observableArrayList();
-        for (Property p : properties) {
-            items.add(p.getName() + " — " + p.getAddress());
+
+        if (properties.isEmpty()) {
+            VBox emptyState = new VBox(10);
+            emptyState.setAlignment(Pos.CENTER);
+            emptyState.setStyle("-fx-padding: 40;");
+            Label emptyIcon = new Label("⌂");
+            emptyIcon.setStyle("-fx-font-size: 32px; -fx-text-fill: #94A3B8;");
+            Label emptyTitle = new Label("No properties listed yet");
+            emptyTitle.setStyle("-fx-font-size: 16px; -fx-text-fill: #1E293B; -fx-font-weight: bold;");
+            Label emptySub = new Label("Click '+ Add Property' above to list your first property.");
+            emptySub.setStyle("-fx-text-fill: #64748B;");
+            emptyState.getChildren().addAll(emptyIcon, emptyTitle, emptySub);
+            listingsContainer.getChildren().add(emptyState);
+            return;
         }
-        listingsView.setItems(items);
+
+        // Show a max preview of 3 properties nicely formatted
+        int limit = Math.min(properties.size(), 3);
+        for (int i = 0; i < limit; i++) {
+            Property p = properties.get(i);
+            
+            HBox card = new HBox(16);
+            card.getStyleClass().add("card-flat");
+            card.setAlignment(Pos.CENTER_LEFT);
+
+            VBox details = new VBox(4);
+            Label nameLabel = new Label(p.getName());
+            nameLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #0F172A;");
+            
+            Label addressLabel = new Label(p.getAddress());
+            addressLabel.setStyle("-fx-text-fill: #475569; -fx-font-size: 13px;");
+            
+            details.getChildren().addAll(nameLabel, addressLabel);
+            card.getChildren().add(details);
+            
+            listingsContainer.getChildren().add(card);
+        }
     }
 
     @FXML

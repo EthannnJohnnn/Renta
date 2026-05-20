@@ -12,13 +12,11 @@
     <top>
         <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="14">
             <padding><Insets top="14" right="24" bottom="14" left="24"/></padding>
-            <Label text="⌂" style="-fx-font-size: 20px;"/>
             <Label text="Renta" styleClass="nav-brand"/>
-            <Label text="/" style="-fx-text-fill: #475569;"/>
+            <Label text="/" style="-fx-text-fill: rgba(255,255,255,0.6);"/>
             <Label text="My Bookings" styleClass="nav-title"/>
             <Region HBox.hgrow="ALWAYS"/>
-            <Button text="← Dashboard" onAction="#handleBackToDashboard"
-                    styleClass="secondary-button"/>
+            <Button text="← Dashboard" onAction="#handleBackToDashboard" styleClass="secondary-button"/>
             <Button text="Logout" onAction="#handleLogout" styleClass="danger-button"/>
         </HBox>
     </top>
@@ -27,7 +25,6 @@
         <VBox spacing="20">
             <padding><Insets top="28" right="32" bottom="32" left="32"/></padding>
 
-            <!-- Header -->
             <HBox alignment="CENTER_LEFT">
                 <VBox spacing="4" HBox.hgrow="ALWAYS">
                     <Label text="My Bookings" styleClass="screen-title"/>
@@ -35,47 +32,23 @@
                 </VBox>
             </HBox>
 
-            <!-- ═══ EXTENDED STATUS GUIDE ═══ -->
-            <HBox styleClass="card-flat" alignment="CENTER_LEFT" spacing="14">
-                <Label text="Status Guide" styleClass="label-text"/>
-                <Label text="⧗ PENDING"   styleClass="badge-pending"/>
-                <Label text="→ Awaiting landlord" styleClass="subtitle"/>
-                <Label text=" | " styleClass="subtitle"/>
-                <Label text="✓ APPROVED"  styleClass="badge-approved"/>
-                <Label text="→ Confirmed" styleClass="subtitle"/>
-                <Label text=" | " styleClass="subtitle"/>
-                <!-- NEW badges -->
-                <Label text="✕ REJECTED"  styleClass="badge-rejected"/>
-                <Label text="→ Declined" styleClass="subtitle"/>
-                <Label text=" | " styleClass="subtitle"/>
-                <Label text="⊘ CANCELLED" styleClass="badge-cancelled"/>
-                <Label text="→ You cancelled" styleClass="subtitle"/>
-                <Label text=" | " styleClass="subtitle"/>
-                <Label text="⚐ COMPLETED" styleClass="badge-completed"/>
-                <Label text="→ Tenancy ended" styleClass="subtitle"/>
+            <HBox styleClass="card-flat" alignment="CENTER_LEFT" spacing="12">
+                <Label text="Legend:" styleClass="label-text" style="-fx-font-weight: bold;"/>
+                <Label text="PENDING" styleClass="badge-pending" style="-fx-font-size: 11px;"/>
+                <Label text="APPROVED" styleClass="badge-approved" style="-fx-font-size: 11px;"/>
+                <Label text="REJECTED" styleClass="badge-rejected" style="-fx-font-size: 11px;"/>
+                <Label text="CANCELLED" styleClass="badge-cancelled" style="-fx-font-size: 11px;"/>
+                <Label text="COMPLETED" styleClass="badge-completed" style="-fx-font-size: 11px;"/>
             </HBox>
 
-            <!-- Bookings Table -->
-            <TableView fx:id="bookingsTable" styleClass="table-view" VBox.vgrow="ALWAYS">
-                <columns>
-                    <TableColumn fx:id="propertyColumn" text="Property"      prefWidth="185"/>
-                    <TableColumn fx:id="roomColumn"     text="Room"          prefWidth="90"/>
-                    <TableColumn fx:id="priceColumn"    text="Price / Month" prefWidth="130"/>
-                    <TableColumn fx:id="dateColumn"     text="Booking Date"  prefWidth="140"/>
-                    <TableColumn fx:id="statusColumn"   text="Status"        prefWidth="130"/>
-                    <!-- Expanded width for Cancel Request button -->
-                    <TableColumn fx:id="actionsColumn"  text="Actions"       prefWidth="160"/>
-                </columns>
-                <placeholder>
-                    <VBox alignment="CENTER" spacing="10">
-                        <Label text="☰" styleClass="empty-state-icon"/>
-                        <Label text="No bookings yet"
-                               styleClass="empty-state-title"/>
-                        <Label text="Browse properties and book a room to get started."
-                               styleClass="empty-state-sub"/>
+            <!-- Modern Bookings List (Cards) -->
+            <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;" VBox.vgrow="ALWAYS">
+                <content>
+                    <VBox fx:id="bookingsListContainer" spacing="16">
+                        <padding><Insets top="4" right="4" bottom="20" left="4"/></padding>
                     </VBox>
-                </placeholder>
-            </TableView>
+                </content>
+            </ScrollPane>
 
         </VBox>
     </center>

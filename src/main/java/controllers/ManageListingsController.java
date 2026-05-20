@@ -2,14 +2,15 @@ package controllers;
 
 import app.MainApp;
 import dao.PropertyDAO;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import models.Property;
 import models.User;
 
@@ -18,11 +19,7 @@ import java.util.List;
 
 public class ManageListingsController {
 
-    @FXML private TableView<Property> listingsTable;
-    @FXML private TableColumn<Property, String> nameColumn;
-    @FXML private TableColumn<Property, String> addressColumn;
-    @FXML private TableColumn<Property, String> descriptionColumn;
-    @FXML private TableColumn<Property, String> actionsColumn;
+    @FXML private VBox listingsContainer;
     @FXML private Label listingCountLabel;
     @FXML private Label messageLabel;
 
@@ -30,60 +27,82 @@ public class ManageListingsController {
 
     @FXML
     public void initialize() {
-        nameColumn.setCellValueFactory(data ->
-                new SimpleStringProperty(data.getValue().getName()));
-        addressColumn.setCellValueFactory(data ->
-                new SimpleStringProperty(data.getValue().getAddress()));
-        descriptionColumn.setCellValueFactory(data ->
-                new SimpleStringProperty(data.getValue().getDescription()));
-
-        actionsColumn.setCellFactory(col -> new TableCell<>() {
-            private final Button editBtn = new Button("Edit");
-            private final Button roomsBtn = new Button("Rooms");
-            private final Button deleteBtn = new Button("Delete");
-            private final javafx.scene.layout.HBox box =
-                    new javafx.scene.layout.HBox(6, editBtn, roomsBtn, deleteBtn);
-
-            {
-                editBtn.setStyle("-fx-background-color: #4A9EFF; -fx-text-fill: white; " +
-                        "-fx-background-radius: 6; -fx-cursor: hand; -fx-font-size: 11px; -fx-padding: 4 10 4 10;");
-                roomsBtn.setStyle("-fx-background-color: #10B981; -fx-text-fill: white; " +
-                        "-fx-background-radius: 6; -fx-cursor: hand; -fx-font-size: 11px; -fx-padding: 4 10 4 10;");
-                deleteBtn.setStyle("-fx-background-color: #EF4444; -fx-text-fill: white; " +
-                        "-fx-background-radius: 6; -fx-cursor: hand; -fx-font-size: 11px; -fx-padding: 4 10 4 10;");
-
-                editBtn.setOnAction(e -> {
-                    Property selected = getTableView().getItems().get(getIndex());
-                    navigateToEdit(selected);
-                });
-
-                roomsBtn.setOnAction(e -> {
-                    Property selected = getTableView().getItems().get(getIndex());
-                    navigateToRooms(selected);
-                });
-
-                deleteBtn.setOnAction(e -> {
-                    Property selected = getTableView().getItems().get(getIndex());
-                    handleDelete(selected);
-                });
-            }
-
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-                setGraphic(empty ? null : box);
-            }
-        });
-
         loadListings();
     }
 
     private void loadListings() {
+        if(listingsContainer == null) return;
+        listingsContainer.getChildren().clear();
         User user = SessionManager.getInstance().getCurrentUser();
         List<Property> properties = propertyDAO.getPropertiesByLandlordId(user.getId());
-        ObservableList<Property> data = FXCollections.observableArrayList(properties);
-        listingsTable.setItems(data);
+        
         listingCountLabel.setText(properties.size() + " properties listed");
+
+        if (properties.isEmpty()) {
+            VBox emptyState = new VBox(10);
+            emptyState.setAlignment(Pos.CENTER);
+            emptyState.setStyle("-fx-padding: 40;");
+            Label emptyIcon = new Label("⌂");
+            emptyIcon.setStyle("-fx-font-size: 32px; -fx-text-fill: #94A3B8;");
+            Label emptyTitle = new Label("No properties listed yet");
+            emptyTitle.setStyle("-fx-font-size: 16px; -fx-text-fill: #1E293B; -fx-font-weight: bold;");
+            Label emptySub = new Label("Click '+ Add New Property' to list your first property.");
+            emptySub.setStyle("-fx-text-fill: #64748B;");
+            emptyState.getChildren().addAll(emptyIcon, emptyTitle, emptySub);
+            listingsContainer.getChildren().add(emptyState);
+            return;
+        }
+
+        for (Property p : properties) {
+            listingsContainer.getChildren().add(createPropertyCard(p));
+        }
+    }
+
+    private HBox createPropertyCard(Property p) {
+        HBox card = new HBox(16);
+        card.getStyleClass().add("card-flat");
+        card.setAlignment(Pos.CENTER_LEFT);
+
+        // Icon
+        Label icon = new Label("⌂");
+        icon.setStyle("-fx-font-size: 28px; -fx-text-fill: #3B82F6; -fx-background-color: #DBEAFE; -fx-background-radius: 8; -fx-padding: 10 16;");
+
+        // Details
+        VBox details = new VBox(4);
+        Label nameLabel = new Label(p.getName());
+        nameLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #0F172A;");
+        Label addrLabel = new Label(p.getAddress());
+        addrLabel.setStyle("-fx-text-fill: #475569; -fx-font-size: 14px;");
+        Label descLabel = new Label(p.getDescription());
+        descLabel.setStyle("-fx-text-fill: #64748B; -fx-font-size: 13px;");
+        details.getChildren().addAll(nameLabel, addrLabel, descLabel);
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        // Actions
+        HBox actions = new HBox(10);
+        actions.setAlignment(Pos.CENTER);
+        
+        Button editBtn = new Button("✎ Edit");
+        editBtn.getStyleClass().add("primary-button");
+        editBtn.setStyle("-fx-padding: 8 16;");
+        editBtn.setOnAction(e -> navigateToEdit(p));
+
+        Button roomsBtn = new Button("⊞ Rooms");
+        roomsBtn.getStyleClass().add("secondary-button");
+        roomsBtn.setStyle("-fx-padding: 8 16;");
+        roomsBtn.setOnAction(e -> navigateToRooms(p));
+
+        Button deleteBtn = new Button("✕ Delete");
+        deleteBtn.getStyleClass().add("danger-button");
+        deleteBtn.setStyle("-fx-padding: 8 16;");
+        deleteBtn.setOnAction(e -> handleDelete(p));
+
+        actions.getChildren().addAll(roomsBtn, editBtn, deleteBtn);
+
+        card.getChildren().addAll(icon, details, spacer, actions);
+        return card;
     }
 
     private void navigateToEdit(Property property) {
@@ -128,6 +147,7 @@ public class ManageListingsController {
                     messageLabel.setText("Property deleted successfully.");
                     loadListings();
                 } else {
+                    messageLabel.setStyle("-fx-text-fill: #EF4444; -fx-font-weight: bold;");
                     messageLabel.setText("Failed to delete property.");
                 }
             }

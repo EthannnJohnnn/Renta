@@ -14,18 +14,18 @@
 
 /* ── Navbar ──────────────────────────────────────── */
 .navbar {
-    -fx-background-color: #0F172A;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.30), 10, 0, 0, 3);
+    -fx-background-color: linear-gradient(to right, #1E3A8A, #2563EB, #3B82F6);
+    -fx-effect: dropshadow(gaussian, rgba(37,99,235,0.30), 10, 0, 0, 3);
 }
 .nav-brand {
     -fx-font-size: 20px;
     -fx-font-weight: bold;
-    -fx-text-fill: #60A5FA;
+    -fx-text-fill: #FFFFFF;
 }
 .nav-title {
     -fx-font-size: 15px;
     -fx-font-weight: bold;
-    -fx-text-fill: #CBD5E1;
+    -fx-text-fill: rgba(255,255,255,0.9);
 }
 
 /* ── Hero Banner ─────────────────────────────────── */
@@ -386,3 +386,7 @@
 }
 .check-box:selected .box { -fx-background-color: #2563EB; -fx-border-color: #2563EB; }
 .check-box:selected .mark { -fx-background-color: white; }
+
+.navbar > .label {
+    -fx-text-fill: white;
+}

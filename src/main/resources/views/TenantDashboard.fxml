@@ -23,7 +23,7 @@
             <Label style="-fx-text-fill: white;" styleClass="nav-brand" text="Renta" />
             <Region HBox.hgrow="ALWAYS" />
             <Label fx:id="welcomeLabel" styleClass="nav-title" text="Welcome, Tenant" />
-            <Label style="-fx-text-fill: #475569;" text="·" />
+            <Label style="-fx-text-fill: rgba(255,255,255,0.6);" text="·" />
             <Button onAction="#handleLogout" styleClass="danger-button" text="Logout" />
         </HBox>
     </top>

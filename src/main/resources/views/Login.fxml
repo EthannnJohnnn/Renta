@@ -20,67 +20,67 @@
     <Circle radius="100" fill="#DBEAFE" opacity="0.22"
             translateX="-300" translateY="230"/>
 
-    <!-- Login Card -->
-    <VBox alignment="CENTER" maxWidth="360" maxHeight="480" spacing="0"
-          style="-fx-background-color: white; -fx-background-radius: 18;
-                 -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 28, 0, 0, 6);
-                 -fx-padding: 32 32 28 32;">
-
-        <!-- Brand -->
+    <VBox alignment="CENTER" spacing="20">
+        <!-- Brand OUTSIDE the box -->
         <VBox alignment="CENTER" spacing="4">
             <Label text="Renta"
-                   style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #1E40AF;"/>
+                   style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #1E40AF;"/>
             <Label text="Property Rental Management"
-                   style="-fx-font-size: 13px; -fx-text-fill: #64748B;"/>
+                   style="-fx-font-size: 15px; -fx-text-fill: #334155; -fx-font-weight: bold;"/>
         </VBox>
 
-        <Region prefHeight="28"/>
+        <!-- Login Card -->
+        <VBox alignment="TOP_LEFT" maxWidth="360" maxHeight="480" spacing="0"
+              style="-fx-background-color: white; -fx-background-radius: 18;
+                     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 28, 0, 0, 6);
+                     -fx-padding: 32 32 28 32;">
 
-        <Label text="Welcome back!"
-               style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
-        <Label text="Sign in to your account"
-               style="-fx-font-size: 13px; -fx-text-fill: #64748B;">
-            <VBox.margin><Insets bottom="24" top="4"/></VBox.margin>
-        </Label>
+            <Label text="Welcome back!"
+                   style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+            <Label text="Sign in to your account"
+                   style="-fx-font-size: 13px; -fx-text-fill: #64748B;">
+                <VBox.margin><Insets bottom="24" top="4"/></VBox.margin>
+            </Label>
 
-        <!-- Username -->
-        <Label text="Username" styleClass="label-text">
-            <VBox.margin><Insets bottom="6"/></VBox.margin>
-        </Label>
-        <HBox styleClass="input-wrapper" alignment="CENTER_LEFT">
-            <TextField fx:id="usernameField" promptText="Enter your username"
-                       styleClass="input-field" HBox.hgrow="ALWAYS"/>
-        </HBox>
-
-        <!-- Password -->
-        <Label text="Password" styleClass="label-text">
-            <VBox.margin><Insets top="16" bottom="6"/></VBox.margin>
-        </Label>
-        <HBox styleClass="input-wrapper" alignment="CENTER_LEFT">
-            <PasswordField fx:id="passwordField" promptText="Enter your password"
+            <!-- Username -->
+            <Label text="Username" styleClass="label-text">
+                <VBox.margin><Insets bottom="6"/></VBox.margin>
+            </Label>
+            <HBox styleClass="input-wrapper" alignment="CENTER_LEFT">
+                <TextField fx:id="usernameField" promptText="Enter your username"
                            styleClass="input-field" HBox.hgrow="ALWAYS"/>
-        </HBox>
+            </HBox>
 
-        <!-- Error -->
-        <Label fx:id="errorLabel" text="" styleClass="error-label" wrapText="true">
-            <VBox.margin><Insets top="10"/></VBox.margin>
-        </Label>
+            <!-- Password -->
+            <Label text="Password" styleClass="label-text">
+                <VBox.margin><Insets top="16" bottom="6"/></VBox.margin>
+            </Label>
+            <HBox styleClass="input-wrapper" alignment="CENTER_LEFT">
+                <PasswordField fx:id="passwordField" promptText="Enter your password"
+                               styleClass="input-field" HBox.hgrow="ALWAYS"/>
+            </HBox>
 
-        <!-- Sign In Button -->
-        <Button text="Sign In" onAction="#handleLogin" styleClass="primary-button"
-                maxWidth="Infinity">
-            <VBox.margin><Insets top="20"/></VBox.margin>
-        </Button>
+            <!-- Error -->
+            <Label fx:id="errorLabel" text="" styleClass="error-label" wrapText="true">
+                <VBox.margin><Insets top="10"/></VBox.margin>
+            </Label>
 
-        <!-- Register link -->
-        <HBox alignment="CENTER" spacing="4">
-            <VBox.margin><Insets top="18"/></VBox.margin>
-            <Label text="Don't have an account?"
-                   style="-fx-font-size: 13px; -fx-text-fill: #64748B;"/>
-            <Hyperlink text="Register" onAction="#goToRegister"
-                       style="-fx-font-size: 13px; -fx-font-weight: bold;
-                              -fx-text-fill: #2563EB; -fx-border-color: transparent;"/>
-        </HBox>
+            <!-- Sign In Button -->
+            <Button text="Sign In" onAction="#handleLogin" styleClass="primary-button"
+                    maxWidth="Infinity">
+                <VBox.margin><Insets top="20"/></VBox.margin>
+            </Button>
 
+            <!-- Register link -->
+            <HBox alignment="CENTER" spacing="4">
+                <VBox.margin><Insets top="18"/></VBox.margin>
+                <Label text="Don't have an account?"
+                       style="-fx-font-size: 13px; -fx-text-fill: #64748B;"/>
+                <Hyperlink text="Register" onAction="#goToRegister"
+                           style="-fx-font-size: 13px; -fx-font-weight: bold;
+                                  -fx-text-fill: #2563EB; -fx-border-color: transparent;"/>
+            </HBox>
+
+        </VBox>
     </VBox>
 </StackPane>
