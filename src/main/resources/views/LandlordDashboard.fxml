@@ -61,10 +61,10 @@
                                 <Label text="⌂" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2563EB;"/>
                             </VBox>
                             <VBox spacing="2">
-                                <Label text="My Properties" styleClass="stat-label"/>
+                                <Label text="My Properties" style="-fx-font-size: 12px; -fx-text-fill: #2563EB; -fx-font-weight: bold;"/>
                             </VBox>
                         </HBox>
-                        <Label text="Manage" styleClass="stat-number" style="-fx-font-size: 20px;"/>
+                        <Label text="Manage" styleClass="stat-number" style="-fx-font-size: 20px; -fx-text-fill: #2563EB;"/>
                     </VBox>
 
                     <VBox styleClass="stat-card" spacing="10" HBox.hgrow="ALWAYS">
@@ -73,10 +73,10 @@
                                 <Label text="⊞" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #16A34A;"/>
                             </VBox>
                             <VBox spacing="2">
-                                <Label text="Room Management" styleClass="stat-label"/>
+                                <Label text="Room Management" style="-fx-font-size: 12px; -fx-text-fill: #16A34A; -fx-font-weight: bold;"/>
                             </VBox>
                         </HBox>
-                        <Label text="Rooms" styleClass="stat-number" style="-fx-font-size: 20px;"/>
+                        <Label text="Rooms" styleClass="stat-number" style="-fx-font-size: 20px; -fx-text-fill: #16A34A;"/>
                     </VBox>
 
                     <VBox styleClass="stat-card" spacing="10" HBox.hgrow="ALWAYS">
@@ -85,11 +85,10 @@
                                 <Label text="✉" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #D97706;"/>
                             </VBox>
                             <VBox spacing="2">
-                                <Label text="Pending Requests" styleClass="stat-label"/>
+                                <Label text="Pending Requests" style="-fx-font-size: 12px; -fx-text-fill: #D97706; -fx-font-weight: bold;"/>
                             </VBox>
                         </HBox>
-                        <!-- Controller sets this via pendingCountStat -->
-                        <Label fx:id="pendingCountStat" text="0" styleClass="stat-number" style="-fx-font-size: 32px;"/>
+                        <Label fx:id="pendingCountStat" text="0" styleClass="stat-number" style="-fx-font-size: 32px; -fx-text-fill: #D97706;"/>
                     </VBox>
                 </HBox>
 
