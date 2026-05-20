@@ -25,9 +25,6 @@ public class TenantDashboardController {
     @FXML private TextField searchField;
     @FXML private ComboBox<String> maxPriceFilter;
     @FXML private CheckBox availableOnlyFilter;
-    @FXML private ComboBox<String> maxPriceFilter;
-    @FXML private CheckBox availableOnlyFilter;
-
 
     private final PropertyDAO propertyDAO = new PropertyDAO();
     private List<Property> allProperties;

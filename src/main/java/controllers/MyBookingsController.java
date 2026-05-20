@@ -31,6 +31,7 @@ public class MyBookingsController {
     @FXML private TableColumn<MyBookingRow, String> priceColumn;
     @FXML private TableColumn<MyBookingRow, String> dateColumn;
     @FXML private TableColumn<MyBookingRow, String> statusColumn;
+    @FXML private TableColumn<MyBookingRow, String> actionsColumn;
     @FXML private Label bookingCountLabel;
 
     private final BookingDAO bookingDAO = new BookingDAO();
@@ -65,6 +66,37 @@ public class MyBookingsController {
                     setText(null);
                     setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
                     setAlignment(Pos.CENTER_LEFT);
+                }
+            }
+        });
+
+        // Add the actions column cell factory logic
+        actionsColumn.setCellFactory(param -> new TableCell<>() {
+            private final javafx.scene.control.Button cancelBtn = new javafx.scene.control.Button("Cancel Request");
+
+            {
+                cancelBtn.getStyleClass().add("danger-button");
+                cancelBtn.setOnAction(event -> {
+                    MyBookingRow row = getTableView().getItems().get(getIndex());
+                    if (row != null) {
+                        bookingDAO.updateStatus(row.bookingId, "CANCELLED");
+                        loadBookings(); 
+                    }
+                });
+            }
+
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    MyBookingRow row = getTableView().getItems().get(getIndex());
+                    if ("PENDING".equals(row.status)) {
+                        setGraphic(cancelBtn);
+                    } else {
+                        setGraphic(new Label("-"));
+                    }
                 }
             }
         });
@@ -109,6 +141,7 @@ public class MyBookingsController {
             // }
 
             rows.add(new MyBookingRow(
+                    booking.getId(),
                     propertyLabel,
                     roomLabel,
                     priceLabel,
@@ -133,17 +166,20 @@ public class MyBookingsController {
     }
 
     private static class MyBookingRow {
+        private final int bookingId;
         private final String propertyLabel;
         private final String roomLabel;
         private final String priceLabel;
         private final String bookingDate;
         private final String status;
 
-        private MyBookingRow(String propertyLabel,
+        private MyBookingRow(int bookingId,
+                             String propertyLabel,
                              String roomLabel,
                              String priceLabel,
                              String bookingDate,
                              String status) {
+            this.bookingId = bookingId;
             this.propertyLabel = propertyLabel;
             this.roomLabel = roomLabel;
             this.priceLabel = priceLabel;
