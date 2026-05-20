@@ -99,6 +99,28 @@ public class BookingDAO {
         }
     }
 
+    // READ: Get the total count of PENDING requests for a specific landlord's dashboard
+    public int countPendingByLandlordId(int landlordId) {
+        String sql = "SELECT COUNT(b.id) FROM bookings b " +
+                "JOIN rooms r ON b.room_id = r.id " +
+                "JOIN properties p ON r.property_id = p.id " +
+                "WHERE p.landlord_id = ? AND b.status = 'PENDING'";
+
+        try (Connection conn = DatabaseHelper.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, landlordId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1); // Returns the actual count number
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error counting pending bookings: " + e.getMessage());
+        }
+        return 0; // Return 0 if there's an error or no bookings
+    }
+
     // HELPER: Convert SQL row to Java Object
     private Booking extractBookingFromResultSet(ResultSet rs) throws SQLException {
         Booking booking = new Booking();
