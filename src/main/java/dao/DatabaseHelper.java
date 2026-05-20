@@ -68,7 +68,8 @@ public class DatabaseHelper {
             StringBuilder sqlBuilder = new StringBuilder();
             String line;
             while ((line = reader.readLine()) != null) {
-                sqlBuilder.append(line);
+                sqlBuilder.append(line).append("\n");
+                // Also ignore lines that are purely comments when checking for semicolon to be safe, though not strictly necessary here.
                 if (line.trim().endsWith(";")) {
                     stmt.execute(sqlBuilder.toString());
                     sqlBuilder.setLength(0); // Clear for the next command
