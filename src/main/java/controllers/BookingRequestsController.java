@@ -74,7 +74,8 @@ public class BookingRequestsController {
         actionsColumn.setCellFactory(col -> new TableCell<>() {
             private final Button approveBtn = new Button("Approve");
             private final Button rejectBtn = new Button("Reject");
-            private final HBox box = new HBox(8, approveBtn, rejectBtn);
+            private final Button completeBtn = new Button("🏁 End Tenancy");
+            private final HBox pendingBox = new HBox(8, approveBtn, rejectBtn);
 
             {
                 approveBtn.getStyleClass().add("success-button");
@@ -89,12 +90,28 @@ public class BookingRequestsController {
                     BookingRequestRow row = getTableView().getItems().get(getIndex());
                     updateStatus(row, "REJECTED");
                 });
+
+                completeBtn.setOnAction(e -> {
+                    BookingRequestRow row = getTableView().getItems().get(getIndex());
+                    updateStatus(row, "COMPLETED");
+                });
             }
 
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
-                setGraphic(empty ? null : box);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    BookingRequestRow row = getTableView().getItems().get(getIndex());
+                    if ("PENDING".equals(row.status)) {
+                        setGraphic(pendingBox);
+                    } else if ("APPROVED".equals(row.status)) {
+                        setGraphic(completeBtn);
+                    } else {
+                        setGraphic(new Label("-"));
+                    }
+                }
             }
         });
 
