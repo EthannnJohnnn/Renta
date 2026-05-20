@@ -11,12 +11,18 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.StackPane;
 import models.Property;
 import models.Room;
 import dao.ReviewDAO;
 import models.Review;
 import models.User;
 
+import javafx.scene.image.ImageView;
+import javafx.scene.image.Image;
 import java.io.IOException;
 import java.util.List;
 
@@ -37,6 +43,9 @@ public class PropertyDetailController {
     @FXML private TextArea commentArea;
     @FXML private Label errorLabel;
     @FXML private Label reviewErrorLabel;
+    @FXML private StackPane imageContainer;
+    @FXML private ImageView propertyImageView;
+    @FXML private Label imageErrorLabel;
 
     private final RoomDAO roomDAO = new RoomDAO();
     private Property currentProperty;
@@ -47,6 +56,19 @@ public class PropertyDetailController {
         navPropertyName.setText(property.getName());
         propertyNameLabel.setText(property.getName());
         propertyAddressLabel.setText(property.getAddress());
+
+        String url = property.getImageUrl();
+        if (url != null && !url.isBlank()) {
+            try {
+                Image img = new Image(url, true); // background load
+                propertyImageView.setImage(img);
+                imageContainer.setVisible(true);
+                imageContainer.setManaged(true);
+            } catch (Exception e) {
+                imageErrorLabel.setVisible(true);
+            }
+        }
+
         propertyDescriptionLabel.setText(
                 property.getDescription() != null ? property.getDescription() : "No description provided.");
 
