@@ -34,8 +34,15 @@ public class MainApp extends Application {
                     MainApp.class.getResource("/" + fxmlPath)
             );
             Parent root = loader.load();
-            Scene scene = new Scene(root, 800, 600);
-            primaryStage.setScene(scene);
+            
+            if (primaryStage.getScene() != null) {
+                // If scene exists, preserve window size/fullscreen state by just swapping the root
+                primaryStage.getScene().setRoot(root);
+            } else {
+                // Initial launch
+                Scene scene = new Scene(root, 800, 600);
+                primaryStage.setScene(scene);
+            }
         } catch (IOException e) {
             System.err.println("Could not load: " + fxmlPath);
             e.printStackTrace();
