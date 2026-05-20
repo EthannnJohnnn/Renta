@@ -12,9 +12,9 @@
     <top>
         <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="14">
             <padding><Insets top="14" right="24" bottom="14" left="24"/></padding>
-            <Label text="⌂" style="-fx-font-size: 20px;"/>
+            <Label text="⌂" style="-fx-font-size: 20px; -fx-text-fill: white;"/>
             <Label text="Renta" styleClass="nav-brand"/>
-            <Label text="/" style="-fx-text-fill: #475569;"/>
+            <Label text="/" style="-fx-text-fill: rgba(255,255,255,0.6);"/>
             <Label text="My Properties" styleClass="nav-title"/>
             <Region HBox.hgrow="ALWAYS"/>
             <Button text="← Dashboard" onAction="#handleBackToDashboard"
@@ -24,49 +24,36 @@
     </top>
 
     <center>
-        <VBox spacing="20">
-            <padding><Insets top="28" right="32" bottom="32" left="32"/></padding>
+        <ScrollPane fitToWidth="true" styleClass="scroll-pane" style="-fx-background: transparent; -fx-background-color: transparent;">
+            <VBox spacing="20">
+                <padding><Insets top="28" right="32" bottom="32" left="32"/></padding>
 
-            <HBox alignment="CENTER_LEFT" spacing="16">
-                <VBox spacing="4" HBox.hgrow="ALWAYS">
-                    <Label text="Manage Listings" styleClass="screen-title"/>
-                    <Label fx:id="listingCountLabel" text="0 properties listed"
-                           styleClass="subtitle"/>
-                </VBox>
-                <Button text="+ Add New Property" onAction="#handleAddProperty"
-                        styleClass="primary-button"/>
-            </HBox>
-
-            <!-- ═══ UX IMPROVEMENT #3: SAFETY CHECK INFO BAR ═══ -->
-            <!-- This informs the landlord before they attempt to delete -->
-            <!-- The actual block logic is in ManageListingsController.handleDelete() -->
-            <HBox styleClass="card-flat" alignment="CENTER_LEFT" spacing="12">
-                <Label text="⚠" style="-fx-font-size: 16px;"/>
-                <Label text="Safety Check:"  styleClass="label-text"/>
-                <Label text="Properties with PENDING or APPROVED bookings cannot be deleted. Resolve all active bookings first."
-                       styleClass="subtitle" wrapText="true" HBox.hgrow="ALWAYS"/>
-            </HBox>
-
-            <Label fx:id="messageLabel" text="" styleClass="error-label" wrapText="true"/>
-
-            <TableView fx:id="listingsTable" styleClass="table-view" VBox.vgrow="ALWAYS">
-                <columns>
-                    <TableColumn fx:id="nameColumn"        text="Property Name" prefWidth="200"/>
-                    <TableColumn fx:id="addressColumn"     text="Address"       prefWidth="220"/>
-                    <TableColumn fx:id="descriptionColumn" text="Description"   prefWidth="180"/>
-                    <TableColumn fx:id="actionsColumn"     text="Actions"       prefWidth="260"/>
-                </columns>
-                <!-- ═══ UX IMPROVEMENT: FRIENDLY EMPTY STATE ═══ -->
-                <placeholder>
-                    <VBox alignment="CENTER" spacing="10">
-                        <Label text="⌂" styleClass="empty-state-icon"/>
-                        <Label text="No properties listed yet"
-                               styleClass="empty-state-title"/>
-                        <Label text="Click '+ Add New Property' to list your first property."
-                               styleClass="empty-state-sub"/>
+                <HBox alignment="CENTER_LEFT" spacing="16">
+                    <VBox spacing="4" HBox.hgrow="ALWAYS">
+                        <Label text="Manage Listings" styleClass="screen-title"/>
+                        <Label fx:id="listingCountLabel" text="0 properties listed"
+                               styleClass="subtitle"/>
                     </VBox>
-                </placeholder>
-            </TableView>
-        </VBox>
+                    <Button text="+ Add New Property" onAction="#handleAddProperty"
+                            styleClass="primary-button"/>
+                </HBox>
+
+                <!-- SAFETY CHECK INFO BAR -->
+                <HBox styleClass="card" alignment="CENTER_LEFT" spacing="12" style="-fx-background-color: #FFFBEB; -fx-border-color: #FCD34D;">
+                    <Label text="⚠" style="-fx-font-size: 18px; -fx-text-fill: #D97706;"/>
+                    <VBox spacing="2" HBox.hgrow="ALWAYS">
+                        <Label text="Safety Check:" styleClass="label-text" style="-fx-text-fill: #92400E;"/>
+                        <Label text="Properties with PENDING or APPROVED bookings cannot be deleted. Resolve all active bookings first."
+                               styleClass="subtitle" wrapText="true" style="-fx-text-fill: #B45309;" />
+                    </VBox>
+                </HBox>
+
+                <Label fx:id="messageLabel" text="" styleClass="error-label" wrapText="true"/>
+
+                <VBox fx:id="listingsContainer" spacing="16">
+                    <!-- Filled dynamically by Controller -->
+                </VBox>
+            </VBox>
+        </ScrollPane>
     </center>
 </BorderPane>

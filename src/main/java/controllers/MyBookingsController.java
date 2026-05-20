@@ -4,34 +4,26 @@ import app.MainApp;
 import dao.BookingDAO;
 import dao.PropertyDAO;
 import dao.RoomDAO;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.Region;
 import models.Booking;
 import models.Property;
 import models.Room;
 import models.User;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class MyBookingsController {
 
-    @FXML private TableView<MyBookingRow> bookingsTable;
-    @FXML private TableColumn<MyBookingRow, String> propertyColumn;
-    @FXML private TableColumn<MyBookingRow, String> roomColumn;
-    @FXML private TableColumn<MyBookingRow, String> priceColumn;
-    @FXML private TableColumn<MyBookingRow, String> dateColumn;
-    @FXML private TableColumn<MyBookingRow, String> statusColumn;
-    @FXML private TableColumn<MyBookingRow, String> actionsColumn;
+    @FXML private VBox bookingsListContainer;
     @FXML private Label bookingCountLabel;
 
     private final BookingDAO bookingDAO = new BookingDAO();
@@ -44,62 +36,6 @@ public class MyBookingsController {
             MainApp.switchTo("views/Login.fxml");
             return;
         }
-
-        propertyColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().propertyLabel));
-        roomColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().roomLabel));
-        priceColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().priceLabel));
-        dateColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().bookingDate));
-        statusColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().status));
-
-        // Status badge renderer
-        statusColumn.setCellFactory(col -> new TableCell<>() {
-            @Override
-            protected void updateItem(String status, boolean empty) {
-                super.updateItem(status, empty);
-                if (empty || status == null) {
-                    setText(null);
-                    setGraphic(null);
-                } else {
-                    Label badge = new Label(status.toUpperCase());
-                    badge.getStyleClass().add(getStatusBadgeClass(status));
-                    setGraphic(badge);
-                    setText(null);
-                    setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-                    setAlignment(Pos.CENTER_LEFT);
-                }
-            }
-        });
-
-        // Actions column: Cancel Request button only for PENDING rows
-        actionsColumn.setCellFactory(param -> new TableCell<>() {
-            private final javafx.scene.control.Button cancelBtn = new javafx.scene.control.Button("Cancel Request");
-
-            {
-                cancelBtn.getStyleClass().add("danger-button");
-                cancelBtn.setOnAction(event -> {
-                    MyBookingRow row = getTableView().getItems().get(getIndex());
-                    if (row != null) {
-                        bookingDAO.updateStatus(row.bookingId, "CANCELLED");
-                        loadBookings();
-                    }
-                });
-            }
-
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    MyBookingRow row = getTableView().getItems().get(getIndex());
-                    if ("PENDING".equals(row.status)) {
-                        setGraphic(cancelBtn);
-                    } else {
-                        setGraphic(new Label("-"));
-                    }
-                }
-            }
-        });
 
         loadBookings();
     }
@@ -116,6 +52,7 @@ public class MyBookingsController {
     }
 
     private void loadBookings() {
+        bookingsListContainer.getChildren().clear();
         User user = SessionManager.getInstance().getCurrentUser();
         List<Booking> bookings = bookingDAO.getBookingsByTenantId(user.getId());
 
@@ -125,13 +62,25 @@ public class MyBookingsController {
             propertyNameByRoomPropertyId.put(p.getId(), p.getName());
         }
 
-        List<MyBookingRow> rows = new ArrayList<>();
+        bookingCountLabel.setText(bookings.size() + " booking(s)");
+
+        if (bookings.isEmpty()) {
+            VBox emptyState = new VBox(10);
+            emptyState.setAlignment(Pos.CENTER);
+            Label emptyTitle = new Label("No bookings yet");
+            emptyTitle.setStyle("-fx-font-size: 16px; -fx-text-fill: #1E293B; -fx-font-weight: bold;");
+            Label emptySub = new Label("Browse properties and book a room to get started.");
+            emptySub.setStyle("-fx-text-fill: #64748B;");
+            emptyState.getChildren().addAll(emptyTitle, emptySub);
+            bookingsListContainer.getChildren().add(emptyState);
+            return;
+        }
+
         for (Booking booking : bookings) {
             String roomLabel    = "Room #" + booking.getRoomId();
             String priceLabel   = "—";
             String propertyLabel = "Property";
 
-            // RoomDAO.getRoomById() confirmed ready (merged in PR 26/27)
             Room room = roomDAO.getRoomById(booking.getRoomId());
             if (room != null) {
                 roomLabel     = room.getRoomNumber();
@@ -142,18 +91,48 @@ public class MyBookingsController {
                 );
             }
 
-            rows.add(new MyBookingRow(
-                    booking.getId(),
-                    propertyLabel,
-                    roomLabel,
-                    priceLabel,
-                    booking.getBookingDate(),
-                    booking.getStatus()
-            ));
+            bookingsListContainer.getChildren().add(createBookingCard(booking, propertyLabel, roomLabel, priceLabel));
+        }
+    }
+
+    private HBox createBookingCard(Booking booking, String propertyName, String roomName, String price) {
+        HBox card = new HBox(16);
+        card.getStyleClass().add("card-flat");
+        card.setAlignment(Pos.CENTER_LEFT);
+
+        VBox leftDetails = new VBox(4);
+        Label propLabel = new Label(propertyName);
+        propLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #0F172A;");
+        Label roomSubLabel = new Label("Room " + roomName + "  •  " + price + " / Month");
+        roomSubLabel.setStyle("-fx-text-fill: #475569; -fx-font-size: 13px;");
+        Label dateLabel = new Label("Booked on: " + booking.getBookingDate());
+        dateLabel.setStyle("-fx-text-fill: #94A3B8; -fx-font-size: 12px;");
+        leftDetails.getChildren().addAll(propLabel, roomSubLabel, dateLabel);
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        VBox rightDetails = new VBox(8);
+        rightDetails.setAlignment(Pos.CENTER_RIGHT);
+
+        Label statusBadge = new Label(booking.getStatus().toUpperCase());
+        statusBadge.getStyleClass().add(getStatusBadgeClass(booking.getStatus()));
+        
+        rightDetails.getChildren().add(statusBadge);
+
+        if ("PENDING".equals(booking.getStatus())) {
+            Button cancelBtn = new Button("Cancel Request");
+            cancelBtn.getStyleClass().add("danger-button");
+            cancelBtn.setStyle("-fx-font-size: 11px; -fx-padding: 4 10;");
+            cancelBtn.setOnAction(e -> {
+                bookingDAO.updateStatus(booking.getId(), "CANCELLED");
+                loadBookings();
+            });
+            rightDetails.getChildren().add(cancelBtn);
         }
 
-        bookingsTable.setItems(FXCollections.observableArrayList(rows));
-        bookingCountLabel.setText(rows.size() + " booking(s)");
+        card.getChildren().addAll(leftDetails, spacer, rightDetails);
+        return card;
     }
 
     @FXML
@@ -165,28 +144,5 @@ public class MyBookingsController {
     public void handleLogout() {
         SessionManager.getInstance().logout();
         MainApp.switchTo("views/Login.fxml");
-    }
-
-    private static class MyBookingRow {
-        private final int    bookingId;
-        private final String propertyLabel;
-        private final String roomLabel;
-        private final String priceLabel;
-        private final String bookingDate;
-        private final String status;
-
-        private MyBookingRow(int bookingId,
-                             String propertyLabel,
-                             String roomLabel,
-                             String priceLabel,
-                             String bookingDate,
-                             String status) {
-            this.bookingId     = bookingId;
-            this.propertyLabel = propertyLabel;
-            this.roomLabel     = roomLabel;
-            this.priceLabel    = priceLabel;
-            this.bookingDate   = bookingDate;
-            this.status        = status;
-        }
     }
 }

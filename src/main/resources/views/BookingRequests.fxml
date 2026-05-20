@@ -12,9 +12,9 @@
     <top>
         <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="14">
             <padding><Insets top="14" right="24" bottom="14" left="24"/></padding>
-            <Label text="⌂" style="-fx-font-size: 20px;"/>
+            <Label text="⌂" style="-fx-font-size: 20px; -fx-text-fill: white;"/>
             <Label text="Renta" styleClass="nav-brand"/>
-            <Label text="/" style="-fx-text-fill: #475569;"/>
+            <Label text="/" style="-fx-text-fill: rgba(255,255,255,0.6);"/>
             <Label text="Booking Requests" styleClass="nav-title"/>
             <Region HBox.hgrow="ALWAYS"/>
             <Button text="← Dashboard" onAction="#handleBackToDashboard"
@@ -24,56 +24,40 @@
     </top>
 
     <center>
-        <VBox spacing="20">
-            <padding><Insets top="28" right="32" bottom="32" left="32"/></padding>
+        <ScrollPane fitToWidth="true" styleClass="scroll-pane" style="-fx-background: transparent; -fx-background-color: transparent;">
+            <VBox spacing="20">
+                <padding><Insets top="28" right="32" bottom="32" left="32"/></padding>
 
-            <!-- Header -->
-            <HBox alignment="CENTER_LEFT">
-                <VBox spacing="4" HBox.hgrow="ALWAYS">
-                    <Label text="Booking Requests" styleClass="screen-title"/>
-                    <Label fx:id="requestCountLabel" text="0 pending requests"
-                           styleClass="subtitle"/>
-                </VBox>
-            </HBox>
-
-            <!-- ═══ ACTIONS GUIDE ═══ -->
-            <HBox styleClass="card-flat" alignment="CENTER_LEFT" spacing="16">
-                <Label text="Actions Guide" styleClass="label-text"/>
-                <Label text="✓ Approve" styleClass="subtitle"/>
-                <Label text="→ Confirms booking and marks room unavailable" styleClass="subtitle"/>
-                <Label text="  |  " styleClass="subtitle"/>
-                <Label text="✕ Reject" styleClass="subtitle"/>
-                <Label text="→ Declines and restores room availability" styleClass="subtitle"/>
-                <Label text="  |  " styleClass="subtitle"/>
-                <!-- NEW: End Tenancy explanation -->
-                <Label text="⚐ End Tenancy" styleClass="subtitle"/>
-                <Label text="→ Marks booking complete, room becomes available again" styleClass="subtitle"/>
-            </HBox>
-
-            <Label fx:id="messageLabel" text="" styleClass="error-label" wrapText="true"/>
-
-            <!-- ═══ BOOKINGS TABLE ═══ -->
-            <TableView fx:id="bookingsTable" styleClass="table-view" VBox.vgrow="ALWAYS">
-                <columns>
-                    <TableColumn fx:id="tenantColumn"   text="Tenant"       prefWidth="140"/>
-                    <TableColumn fx:id="propertyColumn" text="Property"     prefWidth="170"/>
-                    <TableColumn fx:id="roomColumn"     text="Room"         prefWidth="90"/>
-                    <TableColumn fx:id="dateColumn"     text="Booking Date" prefWidth="130"/>
-                    <TableColumn fx:id="statusColumn"   text="Status"       prefWidth="120"/>
-                    <!-- Expanded width to 200 for action buttons -->
-                    <TableColumn fx:id="actionsColumn"  text="Actions"      prefWidth="200"/>
-                </columns>
-                <placeholder>
-                    <VBox alignment="CENTER" spacing="10">
-                        <Label text="✉" styleClass="empty-state-icon"/>
-                        <Label text="No booking requests yet"
-                               styleClass="empty-state-title"/>
-                        <Label text="When tenants submit bookings for your properties, they will appear here."
-                               styleClass="empty-state-sub"/>
+                <!-- Header -->
+                <HBox alignment="CENTER_LEFT">
+                    <VBox spacing="4" HBox.hgrow="ALWAYS">
+                        <Label text="Booking Requests" styleClass="screen-title"/>
+                        <Label fx:id="requestCountLabel" text="0 pending requests"
+                               styleClass="subtitle"/>
                     </VBox>
-                </placeholder>
-            </TableView>
+                </HBox>
 
-        </VBox>
+                <!-- ACTIONS GUIDE -->
+                <HBox styleClass="card-flat" alignment="CENTER_LEFT" spacing="16">
+                    <Label text="Actions Guide" styleClass="label-text"/>
+                    <Label text="✓ Approve" styleClass="subtitle" style="-fx-text-fill: #16A34A; -fx-font-weight: bold;"/>
+                    <Label text="→ Confirms booking" styleClass="subtitle"/>
+                    <Label text="  |  " styleClass="subtitle"/>
+                    <Label text="✕ Reject" styleClass="subtitle" style="-fx-text-fill: #DC2626; -fx-font-weight: bold;"/>
+                    <Label text="→ Declines booking" styleClass="subtitle"/>
+                    <Label text="  |  " styleClass="subtitle"/>
+                    <Label text="⚐ End Tenancy" styleClass="subtitle" style="-fx-text-fill: #0284C7; -fx-font-weight: bold;"/>
+                    <Label text="→ Marks complete" styleClass="subtitle"/>
+                </HBox>
+
+                <Label fx:id="messageLabel" text="" styleClass="error-label" wrapText="true"/>
+
+                <!-- CARDS CONTAINER -->
+                <VBox fx:id="bookingsContainer" spacing="16">
+                    <!-- Filled dynamically by Controller -->
+                </VBox>
+
+            </VBox>
+        </ScrollPane>
     </center>
 </BorderPane>
