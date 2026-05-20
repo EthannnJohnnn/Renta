@@ -10,20 +10,6 @@ import java.util.List;
 
 public class BookingDAO {
 
-    public static int countPendingByLandlordId(int id) {
-
-        // TODO: Implement the actual database logic.
-        // Expected SQL query for later:
-        // SELECT COUNT(b.id)
-        // FROM bookings b
-        // JOIN rooms r ON b.room_id = r.id
-        // JOIN properties p ON r.property_id = p.id
-        // WHERE p.landlord_id = ? AND b.status = 'PENDING'
-
-        return 0; // Temporary return to bypass compiler error
-
-    }
-
     // CREATE: Add a new booking (Tenant action)
     // NOTE: A "PENDING" status does NOT lock the room.
     // The room is only marked as unavailable when the landlord explicitly APPROVES the booking.
