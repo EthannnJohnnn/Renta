@@ -12,64 +12,82 @@
     <top>
         <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="14">
             <padding><Insets top="14" right="24" bottom="14" left="24"/></padding>
-            <Label text="⌂" style="-fx-font-size: 20px;"/>
+            <Label text="⌂" style="-fx-font-size: 20px; -fx-text-fill: white;"/>
             <Label text="Renta" styleClass="nav-brand"/>
-            <Label text="/" style="-fx-text-fill: #475569;"/>
+            <Label text="/" style="-fx-text-fill: rgba(255,255,255,0.6);"/>
             <Label fx:id="navPropertyName" text="Manage Rooms" styleClass="nav-title"/>
             <Region HBox.hgrow="ALWAYS"/>
-            <Button text="← Back to Listings" onAction="#handleBack"
-                    styleClass="secondary-button"/>
+            <Button text="← Back to Listings" onAction="#handleBack" styleClass="secondary-button"/>
             <Button text="Logout" onAction="#handleLogout" styleClass="danger-button"/>
         </HBox>
     </top>
 
     <center>
-        <ScrollPane fitToWidth="true" styleClass="scroll-pane">
+        <ScrollPane fitToWidth="true" styleClass="scroll-pane"
+                    style="-fx-background: transparent; -fx-background-color: transparent;">
             <VBox spacing="20">
                 <padding><Insets top="28" right="32" bottom="32" left="32"/></padding>
 
+                <!-- Header -->
                 <HBox alignment="CENTER_LEFT" spacing="16">
                     <VBox spacing="4" HBox.hgrow="ALWAYS">
-                        <Label fx:id="propertyNameLabel" text="Property Rooms"
-                               styleClass="screen-title"/>
+                        <Label fx:id="propertyNameLabel" text="Property Rooms" styleClass="screen-title"/>
                         <Label fx:id="roomCountLabel" text="0 rooms" styleClass="subtitle"/>
                     </VBox>
-                    <Button text="+ Add Room" onAction="#handleAddRoom"
-                            styleClass="primary-button"/>
+                    <Button text="+ Add Room" onAction="#handleAddRoom" styleClass="primary-button"/>
                 </HBox>
 
-                <!-- ═══ UX IMPROVEMENT #3: SAFETY CHECK INFO BAR FOR ROOMS ═══ -->
-                <HBox styleClass="card-flat" alignment="CENTER_LEFT" spacing="12">
-                    <Label text="⚠" style="-fx-font-size: 16px;"/>
-                    <Label text="Safety Check:" styleClass="label-text"/>
-                    <Label text="Rooms with PENDING or APPROVED bookings cannot be deleted. Resolve active bookings first."
-                           styleClass="subtitle" wrapText="true" HBox.hgrow="ALWAYS"/>
+                <!-- Safety Notice -->
+                <HBox styleClass="card" alignment="CENTER_LEFT" spacing="12"
+                      style="-fx-background-color: #FFFBEB; -fx-border-color: #FCD34D; -fx-padding: 14 20;">
+                    <Label text="⚠" style="-fx-font-size: 18px; -fx-text-fill: #D97706;"/>
+                    <VBox spacing="2" HBox.hgrow="ALWAYS">
+                        <Label text="Safety Check:" styleClass="label-text" style="-fx-text-fill: #92400E;"/>
+                        <Label text="Rooms with PENDING or APPROVED bookings cannot be deleted. Resolve active bookings first."
+                               styleClass="subtitle" wrapText="true" style="-fx-text-fill: #B45309;"/>
+                    </VBox>
                 </HBox>
 
                 <Label fx:id="messageLabel" text="" styleClass="error-label" wrapText="true"/>
 
-                <TableView fx:id="roomsTable" styleClass="table-view" prefHeight="260">
-                    <columns>
-                        <TableColumn fx:id="roomNumberColumn" text="Room No."     prefWidth="120"/>
-                        <TableColumn fx:id="capacityColumn"   text="Capacity"     prefWidth="110"/>
-                        <TableColumn fx:id="priceColumn"      text="Price / Month" prefWidth="140"/>
-                        <TableColumn fx:id="statusColumn"     text="Status"       prefWidth="110"/>
-                        <TableColumn fx:id="actionsColumn"    text="Actions"      prefWidth="180"/>
-                    </columns>
-                    <!-- ═══ UX IMPROVEMENT: FRIENDLY EMPTY STATE ═══ -->
-                    <placeholder>
-                        <VBox alignment="CENTER" spacing="10">
-                            <Label text="⊞" styleClass="empty-state-icon"/>
-                            <Label text="No rooms added yet"
-                                   styleClass="empty-state-title"/>
-                            <Label text="Click '+ Add Room' above to add your first room."
-                                   styleClass="empty-state-sub"/>
-                        </VBox>
-                    </placeholder>
-                </TableView>
+                <!-- Modern Rooms Table (4 columns, no actions column) -->
+                <VBox styleClass="card" spacing="0" style="-fx-padding: 0; -fx-background-radius: 14;">
+
+                    <!-- Table Header Row -->
+                    <HBox style="-fx-background-color: #F8FAFC; -fx-background-radius: 14 14 0 0;
+                                 -fx-border-color: #E2E8F0; -fx-border-width: 0 0 1 0; -fx-padding: 12 20;">
+                        <Label text="ROOM NO." styleClass="section-label" prefWidth="140"/>
+                        <Label text="CAPACITY"  styleClass="section-label" prefWidth="140"/>
+                        <Label text="PRICE / MONTH" styleClass="section-label" prefWidth="180"/>
+                        <Label text="STATUS"   styleClass="section-label" prefWidth="120"/>
+                        <Label text="ACTIONS"  styleClass="section-label" HBox.hgrow="ALWAYS"/>
+                    </HBox>
+
+                    <!-- TableView (columns match header, no actionsColumn) -->
+                    <TableView fx:id="roomsTable" styleClass="table-view"
+                               style="-fx-background-radius: 0 0 14 14; -fx-border-color: #E2E8F0;
+                                      -fx-border-width: 0 1 1 1; -fx-border-radius: 0 0 14 14;"
+                               prefHeight="280">
+                        <columns>
+                            <TableColumn fx:id="roomNumberColumn" text="Room No."      prefWidth="140"/>
+                            <TableColumn fx:id="capacityColumn"   text="Capacity"      prefWidth="140"/>
+                            <TableColumn fx:id="priceColumn"      text="Price / Month" prefWidth="180"/>
+                            <TableColumn fx:id="statusColumn"     text="Status"        prefWidth="120"/>
+                            <TableColumn fx:id="actionsColumn"    text="Actions"       prefWidth="220"/>
+                        </columns>
+                        <placeholder>
+                            <VBox alignment="CENTER" spacing="10" style="-fx-padding: 40;">
+                                <Label text="⊞" style="-fx-font-size: 36px; -fx-text-fill: #CBD5E1;"/>
+                                <Label text="No rooms added yet" styleClass="empty-state-title"/>
+                                <Label text="Click '+ Add Room' above to add your first room."
+                                       styleClass="empty-state-sub"/>
+                            </VBox>
+                        </placeholder>
+                    </TableView>
+                </VBox>
 
                 <!-- Add / Edit Room Inline Form -->
-                <VBox fx:id="roomFormCard" styleClass="card" spacing="16">
+                <VBox fx:id="roomFormCard" styleClass="card" spacing="20">
                     <Label fx:id="formTitleLabel" text="Add New Room" styleClass="card-title"/>
 
                     <HBox spacing="16">
@@ -88,7 +106,6 @@
                             </HBox>
                         </VBox>
                         <VBox spacing="6" HBox.hgrow="ALWAYS">
-                            <!-- ═══ UX IMPROVEMENT #3: CONSISTENT CURRENCY LABEL ═══ -->
                             <Label text="Price / Month (₱) *" styleClass="label-text"/>
                             <HBox styleClass="input-wrapper" alignment="CENTER_LEFT">
                                 <Label text="₱" style="-fx-font-size: 14px; -fx-font-weight: bold;
@@ -107,11 +124,9 @@
                     <Label fx:id="formErrorLabel" text="" styleClass="error-label" wrapText="true"/>
 
                     <HBox spacing="12" alignment="CENTER_RIGHT">
-                        <Button text="Cancel" onAction="#handleCancelForm"
-                                styleClass="secondary-button"/>
+                        <Button text="Cancel" onAction="#handleCancelForm" styleClass="secondary-button"/>
                         <Button fx:id="formSubmitButton" text="Add Room"
-                                onAction="#handleSubmitRoom"
-                                styleClass="primary-button"/>
+                                onAction="#handleSubmitRoom" styleClass="primary-button"/>
                     </HBox>
                 </VBox>
 
