@@ -52,7 +52,10 @@ public class AddEditPropertyController {
             // ADD mode
             User user = SessionManager.getInstance().getCurrentUser();
             Property newProperty = new Property(user.getId(), name, address, description);
+
+            // Set the new Image URL here
             newProperty.setImageUrl(imageUrl);
+
             boolean success = propertyDAO.addProperty(newProperty);
             if (!success) {
                 errorLabel.setText("Failed to add property. Please try again.");
@@ -63,7 +66,10 @@ public class AddEditPropertyController {
             propertyToEdit.setName(name);
             propertyToEdit.setAddress(address);
             propertyToEdit.setDescription(description);
+
+            // Update the Image URL here
             propertyToEdit.setImageUrl(imageUrl);
+
             boolean success = propertyDAO.updateProperty(propertyToEdit);
             if (!success) {
                 errorLabel.setText("Failed to update property. Please try again.");

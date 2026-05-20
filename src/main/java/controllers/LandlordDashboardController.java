@@ -39,7 +39,7 @@ public class LandlordDashboardController {
 
 
         // In initialize(), after loading listings:
-        int pendingCount = bookingDAO.countPendingByLandlordId(user.getId());
+        int pendingCount = bookingDAO.countPendingByLandlordId(currentUser.getId());
         pendingCountStat.setText(String.valueOf(pendingCount));
         if (pendingCount > 0) {
             pendingBannerTitle.setText("⚠️ You have " + pendingCount + " pending booking request(s)!");
