@@ -26,17 +26,16 @@ import javafx.scene.image.Image;
 import java.io.IOException;
 import java.util.List;
 
+import javafx.scene.layout.VBox;
+import javafx.geometry.Insets;
+
 public class PropertyDetailController {
 
     @FXML private Label navPropertyName;
     @FXML private Label propertyNameLabel;
     @FXML private Label propertyAddressLabel;
     @FXML private Label propertyDescriptionLabel;
-    @FXML private TableView<Room> roomsTable;
-    @FXML private TableColumn<Room, String> roomNumberColumn;
-    @FXML private TableColumn<Room, String> capacityColumn;
-    @FXML private TableColumn<Room, String> priceColumn;
-    @FXML private TableColumn<Room, String> availableColumn;
+    @FXML private ListView<Room> roomsListView;
     @FXML private Button bookButton;
     @FXML private ListView<String> reviewsListView;
     @FXML private ComboBox<Integer> ratingComboBox;
@@ -88,26 +87,48 @@ public class PropertyDetailController {
     }
 
     private void loadRooms() {
-        roomNumberColumn.setCellValueFactory(data ->
-                new SimpleStringProperty(data.getValue().getRoomNumber()));
-        capacityColumn.setCellValueFactory(data ->
-                new SimpleStringProperty(data.getValue().getCapacity() + " person(s)"));
-        priceColumn.setCellValueFactory(data ->
-                new SimpleStringProperty("₱" + String.format("%.2f", data.getValue().getPrice())));
-        availableColumn.setCellValueFactory(data ->
-                new SimpleStringProperty(data.getValue().isAvailable() ? "Available" : "Occupied"));
-
         List<Room> rooms = roomDAO.getRoomsByPropertyId(currentProperty.getId());
-        roomsTable.setItems(FXCollections.observableArrayList(rooms));
+        roomsListView.setItems(FXCollections.observableArrayList(rooms));
 
-        roomsTable.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, selected) -> {
+        roomsListView.setCellFactory(listView -> new ListCell<Room>() {
+            @Override
+            protected void updateItem(Room room, boolean empty) {
+                super.updateItem(room, empty);
+                if (empty || room == null) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    VBox vbox = new VBox(6);
+                    vbox.setPadding(new Insets(12, 16, 12, 16));
+                    vbox.setStyle("-fx-background-color: white; -fx-background-radius: 8px; -fx-border-color: #E2E8F0; -fx-border-radius: 8px; -fx-cursor: hand;");
+
+                    Label roomLbl = new Label("🚪 Room " + room.getRoomNumber());
+                    roomLbl.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1E293B;");
+
+                    Label capLbl = new Label("👥 Capacity: " + room.getCapacity() + " person(s)");
+                    capLbl.setStyle("-fx-font-size: 14px; -fx-text-fill: #64748B;");
+
+                    Label priceLbl = new Label(String.format("💰 ₱%,.2f / month", room.getPrice()));
+                    priceLbl.setStyle("-fx-font-size: 14px; -fx-text-fill: #16A34A; -fx-font-weight: bold;");
+
+                    Label statusLbl = new Label(room.isAvailable() ? "✓ Available" : "🚫 Occupied");
+                    statusLbl.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 4px 0px; -fx-text-fill: " + (room.isAvailable() ? "#059669;" : "#DC2626;"));
+
+                    vbox.getChildren().addAll(roomLbl, capLbl, priceLbl, statusLbl);
+                    setGraphic(vbox);
+                    setStyle("-fx-background-color: transparent; -fx-padding: 4px 8px;");
+                }
+            }
+        });
+
+        roomsListView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, selected) -> {
             bookButton.setDisable(selected == null || !selected.isAvailable());
         });
     }
 
     @FXML
     public void handleBook() {
-        Room selected = roomsTable.getSelectionModel().getSelectedItem();
+        Room selected = roomsListView.getSelectionModel().getSelectedItem();
         if (selected == null || !selected.isAvailable()) {
             errorLabel.setText("Please select an available room.");
             return;

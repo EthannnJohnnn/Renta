@@ -72,14 +72,8 @@
                 </HBox>
             </VBox>
 
-            <!-- Properties Table -->
-            <TableView fx:id="propertyTable" styleClass="table-view" VBox.vgrow="ALWAYS">
-                <columns>
-                    <TableColumn fx:id="nameColumn"        text="Property Name" prefWidth="220"/>
-                    <TableColumn fx:id="addressColumn"     text="Address"       prefWidth="240"/>
-                    <TableColumn fx:id="descriptionColumn" text="Description"   prefWidth="240"/>
-                    <TableColumn fx:id="viewColumn"        text=""              prefWidth="120"/>
-                </columns>
+            <!-- Properties List -->
+            <ListView fx:id="propertyListView" onMouseClicked="#handlePropertyClick" styleClass="list-view" VBox.vgrow="ALWAYS">
                 <!-- ═══ UX IMPROVEMENT #2: FRIENDLY EMPTY STATE ═══ -->
                 <placeholder>
                     <VBox alignment="CENTER" spacing="10">
@@ -90,7 +84,7 @@
                                styleClass="empty-state-sub"/>
                     </VBox>
                 </placeholder>
-            </TableView>
+            </ListView>
 
         </VBox>
     </center>
