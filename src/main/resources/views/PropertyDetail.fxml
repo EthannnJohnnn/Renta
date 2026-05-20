@@ -75,13 +75,7 @@
                                 disable="true"/>
                     </HBox>
 
-                    <TableView fx:id="roomsTable" styleClass="table-view" prefHeight="220">
-                        <columns>
-                            <TableColumn fx:id="roomNumberColumn" text="Room"           prefWidth="100"/>
-                            <TableColumn fx:id="capacityColumn"   text="Capacity"       prefWidth="110"/>
-                            <TableColumn fx:id="priceColumn"      text="Price / Month (₱)" prefWidth="160"/>
-                            <TableColumn fx:id="availableColumn"  text="Status"         prefWidth="120"/>
-                        </columns>
+                    <ListView fx:id="roomsListView" styleClass="list-view" prefHeight="220">
                         <placeholder>
                             <VBox alignment="CENTER" spacing="10">
                                 <Label text="⊞" styleClass="empty-state-icon"/>
@@ -91,7 +85,7 @@
                                        styleClass="empty-state-sub"/>
                             </VBox>
                         </placeholder>
-                    </TableView>
+                    </ListView>
 
                     <Label fx:id="errorLabel" text="" styleClass="error-label"/>
                 </VBox>

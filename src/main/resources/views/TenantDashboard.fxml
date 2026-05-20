@@ -96,8 +96,8 @@
                 <VBox spacing="14" styleClass="card">
                     <HBox alignment="CENTER_LEFT">
                         <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" styleClass="section-label" text="QUICK SEARCH" HBox.hgrow="ALWAYS" />
+                        <Label alignment="CENTER_RIGHT" style="-fx-font-size: 14px;" styleClass="subtitle" text="  - Double-click a result to view details" textAlignment="RIGHT" />
                     </HBox>
-                     <Label alignment="CENTER_RIGHT" style="-fx-font-size: 14px;" styleClass="subtitle" text="Double-click a result to view details" textAlignment="RIGHT" />
 
                     <!-- ═══ UX IMPROVEMENT: SEARCH & FILTER BAR ═══ -->
                     <HBox alignment="CENTER_LEFT" spacing="12" style="-fx-padding: 0;" styleClass="card">
