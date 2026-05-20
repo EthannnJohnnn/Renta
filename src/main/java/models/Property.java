@@ -39,4 +39,8 @@ public class Property {
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
+
+    public String getImageUrl() {
+        return null; //temporary
+    }
 }

@@ -9,47 +9,51 @@
             styleClass="page-container"
             stylesheets="@../styles/styles.css">
 
-    <!-- TOP NAV -->
     <top>
-        <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="16">
+        <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="14">
             <padding><Insets top="14" right="24" bottom="14" left="24"/></padding>
+            <Label text="🏠" style="-fx-font-size: 20px;"/>
             <Label text="Renta" styleClass="nav-brand"/>
-            <Label text="|" styleClass="nav-title" opacity="0.3"/>
+            <Label text="/" style="-fx-text-fill: #475569;"/>
             <Label fx:id="screenTitleLabel" text="Add New Property" styleClass="nav-title"/>
             <Region HBox.hgrow="ALWAYS"/>
-            <Button text="← Back to Listings" onAction="#handleCancel" styleClass="secondary-button"/>
+            <Button text="← Back to Listings" onAction="#handleCancel"
+                    styleClass="secondary-button"/>
         </HBox>
     </top>
 
-    <!-- MAIN CONTENT -->
     <center>
         <ScrollPane fitToWidth="true" styleClass="scroll-pane">
-            <VBox alignment="TOP_CENTER" spacing="24">
-                <padding><Insets top="40" right="200" bottom="40" left="200"/></padding>
+            <VBox alignment="TOP_CENTER" spacing="20">
+                <padding><Insets top="32" right="160" bottom="40" left="160"/></padding>
 
-                <!-- Header -->
-                <VBox spacing="6">
-                    <Label fx:id="headerLabel" text="Add New Property" styleClass="screen-title"/>
-                    <Label text="Fill in the details below to list your property." styleClass="subtitle"/>
+                <VBox spacing="4">
+                    <Label fx:id="headerLabel" text="Add New Property"
+                           styleClass="screen-title"/>
+                    <Label text="Fill in the details below to list your property."
+                           styleClass="subtitle"/>
                 </VBox>
 
-                <!-- Form Card -->
                 <VBox styleClass="card" spacing="20">
 
                     <!-- Property Name -->
                     <VBox spacing="6">
                         <Label text="Property Name *" styleClass="label-text"/>
-                        <TextField fx:id="nameField"
-                                   promptText="e.g. Sunset Boarding House"
-                                   styleClass="input-field"/>
+                        <HBox styleClass="input-wrapper" alignment="CENTER_LEFT">
+                            <TextField fx:id="nameField"
+                                       promptText="e.g. Sunset Boarding House"
+                                       styleClass="input-field" HBox.hgrow="ALWAYS"/>
+                        </HBox>
                     </VBox>
 
                     <!-- Address -->
                     <VBox spacing="6">
                         <Label text="Address *" styleClass="label-text"/>
-                        <TextField fx:id="addressField"
-                                   promptText="e.g. 123 Main St, Labangon, Cebu"
-                                   styleClass="input-field"/>
+                        <HBox styleClass="input-wrapper" alignment="CENTER_LEFT">
+                            <TextField fx:id="addressField"
+                                       promptText="e.g. 123 Main St, Labangon, Cebu"
+                                       styleClass="input-field" HBox.hgrow="ALWAYS"/>
+                        </HBox>
                     </VBox>
 
                     <!-- Description -->
@@ -58,23 +62,40 @@
                         <TextArea fx:id="descriptionArea"
                                   promptText="Describe your property — amenities, rules, nearby landmarks..."
                                   styleClass="text-area-field"
-                                  prefHeight="100"
-                                  wrapText="true"/>
+                                  prefHeight="90" wrapText="true"/>
                     </VBox>
 
-                    <!-- Error label -->
+                    <!-- ═══ UX IMPROVEMENT #3 (TENANT VISUALS): IMAGE URL FIELD ═══ -->
+                    <!-- Controller: AddEditPropertyController.setProperty() must also   -->
+                    <!-- populate imageUrlField; handleSubmit() must read and save it.   -->
+                    <!-- Backend: PropertyDAO needs image_url column (schema change).    -->
+                    <VBox spacing="6">
+                        <HBox alignment="CENTER_LEFT" spacing="8">
+                            <Label text="Property Photo URL" styleClass="label-text"/>
+                            <Label text="(optional)" styleClass="subtitle"/>
+                        </HBox>
+                        <HBox styleClass="input-wrapper" alignment="CENTER_LEFT">
+                            <Label text="🔗" style="-fx-font-size: 14px; -fx-padding: 0 8 0 0;"/>
+                            <TextField fx:id="imageUrlField"
+                                       promptText="Paste an image link (e.g. https://i.imgur.com/example.jpg)"
+                                       styleClass="input-field" HBox.hgrow="ALWAYS"/>
+                        </HBox>
+                        <Label text="Tip: Upload your photo to imgur.com, copy the direct image link, and paste it above."
+                               styleClass="subtitle" wrapText="true"/>
+                    </VBox>
+
                     <Label fx:id="errorLabel" text="" styleClass="error-label" wrapText="true"/>
 
-                    <!-- Action Buttons -->
                     <HBox spacing="12" alignment="CENTER_RIGHT">
-                        <Button text="Cancel" onAction="#handleCancel" styleClass="secondary-button"/>
+                        <Button text="Cancel" onAction="#handleCancel"
+                                styleClass="secondary-button"/>
                         <Button fx:id="submitButton" text="Add Property"
-                                onAction="#handleSubmit" styleClass="primary-button"/>
+                                onAction="#handleSubmit"
+                                styleClass="primary-button"/>
                     </HBox>
 
                 </VBox>
             </VBox>
         </ScrollPane>
     </center>
-
 </BorderPane>
