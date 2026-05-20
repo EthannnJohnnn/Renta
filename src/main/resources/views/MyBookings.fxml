@@ -9,66 +9,79 @@
             styleClass="page-container"
             stylesheets="@../styles/styles.css">
 
-    <!-- TOP NAV -->
     <top>
-        <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="16">
+        <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="14">
             <padding><Insets top="14" right="24" bottom="14" left="24"/></padding>
+            <Label text="🏠" style="-fx-font-size: 20px;"/>
             <Label text="Renta" styleClass="nav-brand"/>
-            <Label text="|" styleClass="nav-title" opacity="0.3"/>
+            <Label text="/" style="-fx-text-fill: #475569;"/>
             <Label text="My Bookings" styleClass="nav-title"/>
             <Region HBox.hgrow="ALWAYS"/>
             <Button text="← Dashboard" onAction="#handleBackToDashboard"
                     styleClass="secondary-button"/>
-            <Button text="Logout" onAction="#handleLogout"
-                    styleClass="danger-button"/>
+            <Button text="Logout" onAction="#handleLogout" styleClass="danger-button"/>
         </HBox>
     </top>
 
-    <!-- MAIN CONTENT -->
     <center>
-        <VBox spacing="24">
-            <padding><Insets top="32" right="40" bottom="32" left="40"/></padding>
+        <VBox spacing="20">
+            <padding><Insets top="28" right="32" bottom="32" left="32"/></padding>
 
-            <!-- Page Header -->
-            <HBox alignment="CENTER_LEFT" spacing="16">
+            <!-- Header -->
+            <HBox alignment="CENTER_LEFT">
                 <VBox spacing="4" HBox.hgrow="ALWAYS">
                     <Label text="My Bookings" styleClass="screen-title"/>
-                    <Label fx:id="bookingCountLabel" text="0 bookings"
-                           styleClass="subtitle"/>
+                    <Label fx:id="bookingCountLabel" text="0 bookings" styleClass="subtitle"/>
                 </VBox>
             </HBox>
 
-            <!-- Info card -->
-            <VBox styleClass="card-flat" spacing="8">
-                <HBox spacing="12" alignment="CENTER_LEFT">
-                    <Label text="Status Guide:" styleClass="label-text"/>
-                    <Label text="PENDING — waiting for landlord review"
-                           styleClass="subtitle"/>
-                    <Label text="  |  " styleClass="subtitle"/>
-                    <Label text="APPROVED — booking confirmed"
-                           styleClass="subtitle"/>
-                    <Label text="  |  " styleClass="subtitle"/>
-                    <Label text="REJECTED — booking declined"
-                           styleClass="subtitle"/>
-                </HBox>
-            </VBox>
+            <!-- ═══ UX IMPROVEMENT: EXTENDED STATUS GUIDE ═══ -->
+            <!-- Now includes CANCELLED and COMPLETED statuses -->
+            <HBox styleClass="card-flat" alignment="CENTER_LEFT" spacing="14">
+                <Label text="Status Guide" styleClass="label-text"/>
+                <Label text="⏳ PENDING"   styleClass="badge-pending"/>
+                <Label text="→ Awaiting landlord" styleClass="subtitle"/>
+                <Label text=" | " styleClass="subtitle"/>
+                <Label text="✅ APPROVED"  styleClass="badge-approved"/>
+                <Label text="→ Confirmed" styleClass="subtitle"/>
+                <Label text=" | " styleClass="subtitle"/>
+                <Label text="❌ REJECTED"  styleClass="badge-rejected"/>
+                <Label text="→ Declined" styleClass="subtitle"/>
+                <Label text=" | " styleClass="subtitle"/>
+                <!-- NEW badges -->
+                <Label text="🚫 CANCELLED" styleClass="badge-cancelled"/>
+                <Label text="→ You cancelled" styleClass="subtitle"/>
+                <Label text=" | " styleClass="subtitle"/>
+                <Label text="🏁 COMPLETED" styleClass="badge-completed"/>
+                <Label text="→ Tenancy ended" styleClass="subtitle"/>
+            </HBox>
 
             <!-- Bookings Table -->
+            <!-- ═══ UX IMPROVEMENT #1 (TENANT): CANCEL REQUEST COLUMN ADDED ═══ -->
+            <!-- actionsColumn is shown only for PENDING rows — handled by cell factory  -->
+            <!-- in MyBookingsController: show "Cancel Request" button only when PENDING  -->
             <TableView fx:id="bookingsTable" styleClass="table-view" VBox.vgrow="ALWAYS">
                 <columns>
-                    <TableColumn fx:id="propertyColumn" text="Property" prefWidth="200"/>
-                    <TableColumn fx:id="roomColumn" text="Room" prefWidth="100"/>
-                    <TableColumn fx:id="priceColumn" text="Price / Month" prefWidth="140"/>
-                    <TableColumn fx:id="dateColumn" text="Booking Date" prefWidth="160"/>
-                    <TableColumn fx:id="statusColumn" text="Status" prefWidth="140"/>
+                    <TableColumn fx:id="propertyColumn" text="Property"      prefWidth="185"/>
+                    <TableColumn fx:id="roomColumn"     text="Room"          prefWidth="90"/>
+                    <TableColumn fx:id="priceColumn"    text="Price / Month" prefWidth="130"/>
+                    <TableColumn fx:id="dateColumn"     text="Booking Date"  prefWidth="140"/>
+                    <TableColumn fx:id="statusColumn"   text="Status"        prefWidth="130"/>
+                    <!-- NEW: Actions column — Cancel Request for PENDING rows -->
+                    <TableColumn fx:id="actionsColumn"  text="Actions"       prefWidth="150"/>
                 </columns>
+                <!-- ═══ UX IMPROVEMENT: FRIENDLY EMPTY STATE ═══ -->
                 <placeholder>
-                    <Label text="You have no bookings yet. Browse properties to make a booking."
-                           styleClass="subtitle"/>
+                    <VBox alignment="CENTER" spacing="10">
+                        <Label text="📋" styleClass="empty-state-icon"/>
+                        <Label text="No bookings yet"
+                               styleClass="empty-state-title"/>
+                        <Label text="Browse properties and book a room to get started."
+                               styleClass="empty-state-sub"/>
+                    </VBox>
                 </placeholder>
             </TableView>
 
         </VBox>
     </center>
-
 </BorderPane>

@@ -1,6 +1,7 @@
 package controllers;
 
 import app.MainApp;
+import dao.BookingDAO;
 import dao.PropertyDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -8,6 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.HBox;
 import models.Property;
 import models.User;
 
@@ -17,8 +19,13 @@ public class LandlordDashboardController {
 
     @FXML private Label welcomeLabel;
     @FXML private ListView<String> listingsView;
+    @FXML private HBox pendingBanner;
+    @FXML private Label pendingBannerTitle;
+    @FXML private Label pendingBannerSub;
+    @FXML private Label pendingCountStat;
 
     private final PropertyDAO propertyDAO = new PropertyDAO();
+    private final BookingDAO bookingDAO = new BookingDAO();
 
     @FXML
     public void initialize() {
@@ -26,6 +33,19 @@ public class LandlordDashboardController {
         if (user != null) {
             welcomeLabel.setText("Welcome, " + user.getUsername());
             loadListings(user.getId());
+
+
+        }
+
+
+        // In initialize(), after loading listings:
+        int pendingCount = bookingDAO.countPendingByLandlordId(user.getId());
+        pendingCountStat.setText(String.valueOf(pendingCount));
+        if (pendingCount > 0) {
+            pendingBannerTitle.setText("⚠️ You have " + pendingCount + " pending booking request(s)!");
+            pendingBannerSub.setText("Review and respond to keep your tenants informed.");
+            pendingBanner.setVisible(true);
+            pendingBanner.setManaged(true);
         }
     }
 

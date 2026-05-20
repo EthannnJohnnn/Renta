@@ -7,7 +7,9 @@ import dao.RoomDAO;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -50,10 +52,30 @@ public class BookingRequestsController {
         dateColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().bookingDate));
         statusColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().status));
 
+        // ✅ Status badge renderer
+        statusColumn.setCellFactory(col -> new TableCell<>() {
+            @Override
+            protected void updateItem(String status, boolean empty) {
+                super.updateItem(status, empty);
+                if (empty || status == null) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    Label badge = new Label(status.toUpperCase());
+                    badge.getStyleClass().add(getStatusBadgeClass(status));
+                    setGraphic(badge);
+                    setText(null);
+                    setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                    setAlignment(Pos.CENTER_LEFT);
+                }
+            }
+        });
+
         actionsColumn.setCellFactory(col -> new TableCell<>() {
             private final Button approveBtn = new Button("Approve");
             private final Button rejectBtn = new Button("Reject");
-            private final HBox box = new HBox(8, approveBtn, rejectBtn);
+            private final Button completeBtn = new Button("🏁 End Tenancy");
+            private final HBox pendingBox = new HBox(8, approveBtn, rejectBtn);
 
             {
                 approveBtn.getStyleClass().add("success-button");
@@ -68,16 +90,41 @@ public class BookingRequestsController {
                     BookingRequestRow row = getTableView().getItems().get(getIndex());
                     updateStatus(row, "REJECTED");
                 });
+
+                completeBtn.setOnAction(e -> {
+                    BookingRequestRow row = getTableView().getItems().get(getIndex());
+                    updateStatus(row, "COMPLETED");
+                });
             }
 
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
-                setGraphic(empty ? null : box);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    BookingRequestRow row = getTableView().getItems().get(getIndex());
+                    if ("PENDING".equals(row.status)) {
+                        setGraphic(pendingBox);
+                    } else if ("APPROVED".equals(row.status)) {
+                        setGraphic(completeBtn);
+                    } else {
+                        setGraphic(new Label("-"));
+                    }
+                }
             }
         });
 
         loadRequests();
+    }
+
+    private String getStatusBadgeClass(String status) {
+        if (status == null) return "badge-pending";
+        return switch (status.toUpperCase()) {
+            case "APPROVED" -> "badge-approved";
+            case "REJECTED" -> "badge-rejected";
+            default -> "badge-pending";
+        };
     }
 
     private void loadRequests() {
@@ -123,12 +170,10 @@ public class BookingRequestsController {
             return;
         }
 
-        // Requires RoomDAO.getRoomById(int) (backend task)
-        // Room room = roomDAO.getRoomById(row.booking.getRoomId());
-        // if (room != null) {
-        //     room.setAvailable("REJECTED".equals(status));
-        //     roomDAO.updateRoom(room);
-        // }
+        // NEW: Auto-restore room availability if the landlord rejects the booking
+        if ("REJECTED".equals(status)) {
+            bookingDAO.restoreRoomAvailability(row.booking.getRoomId());
+        }
 
         messageLabel.setText("");
         loadRequests();

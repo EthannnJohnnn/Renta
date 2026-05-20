@@ -10,22 +10,22 @@
             stylesheets="@../styles/styles.css">
 
     <top>
-        <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="16">
+        <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="14">
             <padding><Insets top="14" right="24" bottom="14" left="24"/></padding>
+            <Label text="🏠" style="-fx-font-size: 20px;"/>
             <Label text="Renta" styleClass="nav-brand"/>
-            <Label text="|" styleClass="nav-title" opacity="0.3"/>
+            <Label text="/" style="-fx-text-fill: #475569;"/>
             <Label text="My Properties" styleClass="nav-title"/>
             <Region HBox.hgrow="ALWAYS"/>
             <Button text="← Dashboard" onAction="#handleBackToDashboard"
                     styleClass="secondary-button"/>
-            <Button text="Logout" onAction="#handleLogout"
-                    styleClass="danger-button"/>
+            <Button text="Logout" onAction="#handleLogout" styleClass="danger-button"/>
         </HBox>
     </top>
 
     <center>
-        <VBox spacing="24">
-            <padding><Insets top="32" right="40" bottom="32" left="40"/></padding>
+        <VBox spacing="20">
+            <padding><Insets top="28" right="32" bottom="32" left="32"/></padding>
 
             <HBox alignment="CENTER_LEFT" spacing="16">
                 <VBox spacing="4" HBox.hgrow="ALWAYS">
@@ -33,27 +33,40 @@
                     <Label fx:id="listingCountLabel" text="0 properties listed"
                            styleClass="subtitle"/>
                 </VBox>
-                <Button text="+ Add New Property"
-                        onAction="#handleAddProperty"
+                <Button text="+ Add New Property" onAction="#handleAddProperty"
                         styleClass="primary-button"/>
+            </HBox>
+
+            <!-- ═══ UX IMPROVEMENT #3: SAFETY CHECK INFO BAR ═══ -->
+            <!-- This informs the landlord before they attempt to delete -->
+            <!-- The actual block logic is in ManageListingsController.handleDelete() -->
+            <HBox styleClass="card-flat" alignment="CENTER_LEFT" spacing="12">
+                <Label text="⚠️" style="-fx-font-size: 16px;"/>
+                <Label text="Safety Check:"  styleClass="label-text"/>
+                <Label text="Properties with PENDING or APPROVED bookings cannot be deleted. Resolve all active bookings first."
+                       styleClass="subtitle" wrapText="true" HBox.hgrow="ALWAYS"/>
             </HBox>
 
             <Label fx:id="messageLabel" text="" styleClass="error-label" wrapText="true"/>
 
             <TableView fx:id="listingsTable" styleClass="table-view" VBox.vgrow="ALWAYS">
                 <columns>
-                    <TableColumn fx:id="nameColumn" text="Property Name" prefWidth="200"/>
-                    <TableColumn fx:id="addressColumn" text="Address" prefWidth="220"/>
-                    <TableColumn fx:id="descriptionColumn" text="Description" prefWidth="180"/>
-                    <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="260"/>
+                    <TableColumn fx:id="nameColumn"        text="Property Name" prefWidth="200"/>
+                    <TableColumn fx:id="addressColumn"     text="Address"       prefWidth="220"/>
+                    <TableColumn fx:id="descriptionColumn" text="Description"   prefWidth="180"/>
+                    <TableColumn fx:id="actionsColumn"     text="Actions"       prefWidth="260"/>
                 </columns>
+                <!-- ═══ UX IMPROVEMENT: FRIENDLY EMPTY STATE ═══ -->
                 <placeholder>
-                    <Label text="No properties yet. Click '+ Add New Property' to get started."
-                           styleClass="subtitle"/>
+                    <VBox alignment="CENTER" spacing="10">
+                        <Label text="🏘" styleClass="empty-state-icon"/>
+                        <Label text="No properties listed yet"
+                               styleClass="empty-state-title"/>
+                        <Label text="Click '+ Add New Property' to list your first property."
+                               styleClass="empty-state-sub"/>
+                    </VBox>
                 </placeholder>
             </TableView>
-
         </VBox>
     </center>
-
 </BorderPane>

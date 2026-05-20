@@ -10,15 +10,33 @@ import java.util.List;
 
 public class BookingDAO {
 
+    public static int countPendingByLandlordId(int id) {
+
+        // TODO: Implement the actual database logic.
+        // Expected SQL query for later:
+        // SELECT COUNT(b.id)
+        // FROM bookings b
+        // JOIN rooms r ON b.room_id = r.id
+        // JOIN properties p ON r.property_id = p.id
+        // WHERE p.landlord_id = ? AND b.status = 'PENDING'
+
+        return 0; // Temporary return to bypass compiler error
+
+    }
+
     // CREATE: Add a new booking (Tenant action)
+    // NOTE: A "PENDING" status does NOT lock the room.
+    // The room is only marked as unavailable when the landlord explicitly APPROVES the booking.
     public boolean addBooking(Booking booking) {
-        String sql = "INSERT INTO bookings (tenant_id, room_id, status) VALUES (?, ?, ?)";
+        // ADDED: booking_date to the SQL string and the 4th parameter (?)
+        String sql = "INSERT INTO bookings (tenant_id, room_id, status, booking_date) VALUES (?, ?, ?, ?)";
         try (Connection conn = DatabaseHelper.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, booking.getTenantId());
             pstmt.setInt(2, booking.getRoomId());
             pstmt.setString(3, booking.getStatus()); // Usually "PENDING"
+            pstmt.setString(4, booking.getBookingDate()); // ADDED: Actually bind the date!
 
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {

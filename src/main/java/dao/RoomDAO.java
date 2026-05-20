@@ -81,6 +81,25 @@ public class RoomDAO {
         }
     }
 
+    // READ: Get a single specific room by its ID (Required for Booking Data tables)
+    public Room getRoomById(int roomId) {
+        String sql = "SELECT * FROM rooms WHERE id = ?";
+        try (Connection conn = DatabaseHelper.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, roomId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    // Uses your existing helper method to return the clean Java object!
+                    return extractRoomFromResultSet(rs);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error fetching room by ID: " + e.getMessage());
+        }
+        return null; // Return null if the room doesn't exist
+    }
+
     // HELPER: Keeps code clean by converting SQL rows to Java Objects
     private Room extractRoomFromResultSet(ResultSet rs) throws SQLException {
         Room room = new Room();

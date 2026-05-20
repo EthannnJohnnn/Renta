@@ -9,54 +9,148 @@
             styleClass="page-container"
             stylesheets="@../styles/styles.css">
 
+    <!-- TOP NAVBAR -->
     <top>
-        <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="12">
+        <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="14">
             <padding><Insets top="14" right="24" bottom="14" left="24"/></padding>
+            <Label text="🏠" style="-fx-font-size: 20px;"/>
             <Label text="Renta" styleClass="nav-brand"/>
             <Region HBox.hgrow="ALWAYS"/>
             <Label fx:id="welcomeLabel" text="Welcome, Tenant" styleClass="nav-title"/>
+            <Label text="·" style="-fx-text-fill: #475569;"/>
             <Button text="Logout" onAction="#handleLogout" styleClass="danger-button"/>
         </HBox>
     </top>
 
+    <!-- MAIN CONTENT -->
     <center>
-        <VBox spacing="24">
-            <padding><Insets top="32" right="40" bottom="32" left="40"/></padding>
+        <ScrollPane fitToWidth="true" styleClass="scroll-pane">
+            <VBox spacing="20">
+                <padding><Insets top="28" right="32" bottom="32" left="32"/></padding>
 
-            <!-- Header Row -->
-            <HBox alignment="CENTER_LEFT" spacing="12">
-                <VBox spacing="4" HBox.hgrow="ALWAYS">
-                    <Label text="Tenant Dashboard" styleClass="screen-title"/>
-                    <Label text="Search and browse available properties below."
-                           styleClass="subtitle"/>
+                <!-- ═══ HERO BANNER ═══ -->
+                <VBox styleClass="hero-banner" spacing="10">
+                    <padding><Insets top="24" right="28" bottom="24" left="28"/></padding>
+                    <Label text="🏡  Find Your Perfect Home" styleClass="hero-title"/>
+                    <Label text="Browse available properties and submit your booking today."
+                           styleClass="hero-subtitle"/>
+                    <HBox spacing="12">
+                        <VBox.margin><Insets top="8"/></VBox.margin>
+                        <Button text="Browse All Properties"
+                                onAction="#handleBrowseProperties"
+                                styleClass="card-hero-action"/>
+                        <Button text="📋  My Bookings"
+                                onAction="#handleMyBookings"
+                                styleClass="card-hero-action"/>
+                    </HBox>
                 </VBox>
-                <Button text="My Bookings"
-                        onAction="#handleMyBookings"
-                        styleClass="secondary-button"/>
-                <Button text="Browse All Properties"
-                        onAction="#handleBrowseProperties"
-                        styleClass="primary-button"/>
-            </HBox>
 
-            <!-- Quick Search Card -->
-            <VBox styleClass="card" spacing="16">
-                <HBox alignment="CENTER_LEFT">
-                    <Label text="QUICK SEARCH" styleClass="label-text"
-                           HBox.hgrow="ALWAYS"/>
-                    <Label text="Double-click a result to view details"
-                           styleClass="subtitle"/>
+                <!-- ═══ STAT CARDS ═══ -->
+                <HBox spacing="16">
+                    <VBox styleClass="stat-card" spacing="8" HBox.hgrow="ALWAYS">
+                        <HBox alignment="CENTER_LEFT" spacing="14">
+                            <VBox styleClass="stat-icon-box-blue" alignment="CENTER">
+                                <Label text="🏘" style="-fx-font-size: 22px;"/>
+                            </VBox>
+                            <VBox spacing="2">
+                                <Label text="Properties" styleClass="stat-label"/>
+                                <Label text="Available" styleClass="stat-label"/>
+                            </VBox>
+                        </HBox>
+                        <Label text="Browse" styleClass="stat-number"
+                               style="-fx-font-size: 20px;"/>
+                    </VBox>
+                    <VBox styleClass="stat-card" spacing="8" HBox.hgrow="ALWAYS">
+                        <HBox alignment="CENTER_LEFT" spacing="14">
+                            <VBox styleClass="stat-icon-box-green" alignment="CENTER">
+                                <Label text="📋" style="-fx-font-size: 22px;"/>
+                            </VBox>
+                            <VBox spacing="2">
+                                <Label text="My" styleClass="stat-label"/>
+                                <Label text="Bookings" styleClass="stat-label"/>
+                            </VBox>
+                        </HBox>
+                        <Label text="Track" styleClass="stat-number"
+                               style="-fx-font-size: 20px;"/>
+                    </VBox>
+                    <VBox styleClass="stat-card" spacing="8" HBox.hgrow="ALWAYS">
+                        <HBox alignment="CENTER_LEFT" spacing="14">
+                            <VBox styleClass="stat-icon-box-amber" alignment="CENTER">
+                                <Label text="⭐" style="-fx-font-size: 22px;"/>
+                            </VBox>
+                            <VBox spacing="2">
+                                <Label text="Leave" styleClass="stat-label"/>
+                                <Label text="Reviews" styleClass="stat-label"/>
+                            </VBox>
+                        </HBox>
+                        <Label text="Share" styleClass="stat-number"
+                               style="-fx-font-size: 20px;"/>
+                    </VBox>
                 </HBox>
-                <TextField fx:id="searchField"
-                           promptText="Search by property name or address..."
-                           styleClass="input-field"
-                           maxWidth="Infinity"/>
-                <ListView fx:id="propertyListView"
-                          prefHeight="280"
-                          styleClass="list-view"
-                          onMouseClicked="#handlePropertyClick"/>
+
+                <!-- ═══ QUICK SEARCH CARD ═══ -->
+                <VBox styleClass="card" spacing="14">
+                    <HBox alignment="CENTER_LEFT">
+                        <Label text="QUICK SEARCH" styleClass="section-label"
+                               HBox.hgrow="ALWAYS"/>
+                        <Label text="Double-click a result to view details"
+                               styleClass="subtitle"/>
+                    </HBox>
+
+                    <!-- Search input -->
+                    <HBox styleClass="input-wrapper" alignment="CENTER_LEFT">
+                        <Label text="🔍" style="-fx-font-size: 15px; -fx-padding: 0 8 0 0;"/>
+                        <TextField fx:id="searchField"
+                                   promptText="Search by property name or address..."
+                                   styleClass="input-field" HBox.hgrow="ALWAYS"/>
+                    </HBox>
+
+                    <!-- ═══ UX IMPROVEMENT #2: ADVANCED SEARCH FILTERS ═══ -->
+                    <HBox styleClass="filter-bar" spacing="20" alignment="CENTER_LEFT">
+                        <Label text="FILTERS" styleClass="section-label"/>
+
+                        <!-- Max Price Filter -->
+                        <HBox spacing="8" alignment="CENTER_LEFT">
+                            <Label text="Max Price:" styleClass="label-text"/>
+                            <ComboBox fx:id="maxPriceFilter"
+                                      promptText="Any price"
+                                      styleClass="combo-field"
+                                      prefWidth="140"/>
+                        </HBox>
+
+                        <!-- Available Rooms Only Filter -->
+                        <HBox spacing="8" alignment="CENTER_LEFT">
+                            <CheckBox fx:id="availableOnlyFilter"
+                                      text="Show only properties with available rooms"
+                                      styleClass="check-box"/>
+                        </HBox>
+
+                        <Region HBox.hgrow="ALWAYS"/>
+
+                        <!-- Clear Filters -->
+                        <Button text="Clear Filters"
+                                onAction="#handleClearFilters"
+                                styleClass="ghost-button"/>
+                    </HBox>
+
+                    <!-- Results list -->
+                    <ListView fx:id="propertyListView"
+                              prefHeight="240"
+                              styleClass="list-view"
+                              onMouseClicked="#handlePropertyClick">
+                        <placeholder>
+                            <VBox alignment="CENTER" spacing="8">
+                                <Label text="🔍" styleClass="empty-state-icon"/>
+                                <Label text="No properties match your search"
+                                       styleClass="empty-state-title"/>
+                                <Label text="Try a different name, address, or adjust your filters."
+                                       styleClass="empty-state-sub"/>
+                            </VBox>
+                        </placeholder>
+                    </ListView>
+                </VBox>
+
             </VBox>
-
-        </VBox>
+        </ScrollPane>
     </center>
-
 </BorderPane>

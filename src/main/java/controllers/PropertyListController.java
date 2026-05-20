@@ -5,6 +5,7 @@ import dao.PropertyDAO;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -25,9 +26,13 @@ public class PropertyListController {
     @FXML private TableColumn<Property, String> viewColumn;
     @FXML private TextField searchField;
     @FXML private Label resultCountLabel;
+    @FXML private ComboBox<String> maxPriceFilter;
+    @FXML private CheckBox availableOnlyFilter;
+    @FXML private ListView<String> propertyListView;
 
     private final PropertyDAO propertyDAO = new PropertyDAO();
     private List<Property> allProperties;
+    private List<Property> filteredProperties;
 
     @FXML
     public void initialize() {
@@ -59,8 +64,28 @@ public class PropertyListController {
 
         allProperties = propertyDAO.getAllProperties();
         populateTable(allProperties);
+        maxPriceFilter.setItems(FXCollections.observableArrayList(
+                "₱3,000", "₱5,000", "₱8,000", "₱10,000", "₱15,000"
+        ));
 
         searchField.textProperty().addListener((obs, oldVal, newVal) -> handleSearch(newVal));
+    }
+
+    // handleClearFilters():
+    @FXML public void handleClearFilters() {
+        searchField.clear();
+        maxPriceFilter.setValue(null);
+        availableOnlyFilter.setSelected(false);
+        filteredProperties = allProperties;
+        populateList(filteredProperties);
+    }
+
+    private void populateList(List<Property> properties) {
+        ObservableList<String> items = FXCollections.observableArrayList();
+        for (Property p : properties) {
+            items.add(p.getName() + " — " + p.getAddress());
+        }
+        propertyListView.setItems(items);
     }
 
     private void handleSearch(String keyword) {
@@ -99,4 +124,6 @@ public class PropertyListController {
         SessionManager.getInstance().logout();
         MainApp.switchTo("views/Login.fxml");
     }
+
+
 }

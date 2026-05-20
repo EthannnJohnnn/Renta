@@ -9,71 +9,84 @@
             styleClass="page-container"
             stylesheets="@../styles/styles.css">
 
-    <!-- TOP NAV -->
     <top>
-        <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="16">
+        <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="14">
             <padding><Insets top="14" right="24" bottom="14" left="24"/></padding>
+            <Label text="🏠" style="-fx-font-size: 20px;"/>
             <Label text="Renta" styleClass="nav-brand"/>
-            <Label text="|" styleClass="nav-title" opacity="0.3"/>
+            <Label text="/" style="-fx-text-fill: #475569;"/>
             <Label text="Book a Room" styleClass="nav-title"/>
             <Region HBox.hgrow="ALWAYS"/>
-            <Button text="← Back to Property" onAction="#handleCancel" styleClass="secondary-button"/>
+            <Button text="← Back to Property" onAction="#handleCancel"
+                    styleClass="secondary-button"/>
         </HBox>
     </top>
 
-    <!-- MAIN CONTENT -->
     <center>
         <ScrollPane fitToWidth="true" styleClass="scroll-pane">
-            <VBox alignment="TOP_CENTER" spacing="24">
-                <padding><Insets top="40" right="200" bottom="40" left="200"/></padding>
+            <VBox alignment="TOP_CENTER" spacing="20">
+                <padding><Insets top="32" right="160" bottom="40" left="160"/></padding>
 
-                <!-- Header -->
-                <VBox spacing="6">
+                <VBox spacing="4">
                     <Label text="Complete Your Booking" styleClass="screen-title"/>
-                    <Label text="Review the room details and confirm your booking request."
+                    <Label text="Review the room details below and confirm your booking request."
                            styleClass="subtitle"/>
                 </VBox>
 
                 <!-- Room Summary Card -->
                 <VBox styleClass="card" spacing="16">
-                    <Label text="ROOM SUMMARY" styleClass="label-text"/>
+                    <Label text="ROOM SUMMARY" styleClass="section-label"/>
                     <HBox spacing="40">
-                        <VBox spacing="6">
+                        <VBox spacing="4">
                             <Label text="Property" styleClass="detail-label"/>
-                            <Label fx:id="propertyNameLabel" text="—" styleClass="detail-value"/>
+                            <Label fx:id="propertyNameLabel" text="—"
+                                   styleClass="detail-value"/>
                         </VBox>
-                        <VBox spacing="6">
+                        <VBox spacing="4">
                             <Label text="Room" styleClass="detail-label"/>
-                            <Label fx:id="roomNumberLabel" text="—" styleClass="detail-value"/>
+                            <Label fx:id="roomNumberLabel" text="—"
+                                   styleClass="detail-value"/>
                         </VBox>
-                        <VBox spacing="6">
+                        <VBox spacing="4">
                             <Label text="Capacity" styleClass="detail-label"/>
-                            <Label fx:id="capacityLabel" text="—" styleClass="detail-value"/>
+                            <Label fx:id="capacityLabel" text="—"
+                                   styleClass="detail-value"/>
                         </VBox>
-                        <VBox spacing="6">
+                        <VBox spacing="4">
+                            <!-- ═══ UX IMPROVEMENT: CONSISTENT CURRENCY FORMAT ═══ -->
+                            <!-- Controller formats using ₱X,XXX.00 pattern          -->
                             <Label text="Price / Month" styleClass="detail-label"/>
-                            <Label fx:id="priceLabel" text="—" styleClass="detail-value"/>
+                            <Label fx:id="priceLabel" text="—"
+                                   styleClass="detail-value"
+                                   style="-fx-text-fill: #2563EB;"/>
                         </VBox>
                     </HBox>
                 </VBox>
 
-                <!-- Booking Form Card -->
-                <VBox styleClass="card" spacing="20">
+                <!-- Booking Details Card -->
+                <VBox styleClass="card" spacing="16">
                     <Label text="Booking Details" styleClass="card-title"/>
 
                     <VBox spacing="6">
                         <Label text="Booking Date *" styleClass="label-text"/>
-                        <DatePicker fx:id="bookingDatePicker"
-                                    promptText="Select date"
-                                    styleClass="input-field"
-                                    maxWidth="Infinity"/>
+                        <DatePicker fx:id="bookingDatePicker" promptText="Select a date"
+                                    styleClass="date-field" maxWidth="Infinity"/>
                     </VBox>
+
+                    <!-- Info note about booking status -->
+                    <HBox styleClass="card-flat" alignment="CENTER_LEFT" spacing="10"
+                          style="-fx-background-color: #EFF6FF; -fx-border-color: #BFDBFE;">
+                        <Label text="ℹ️" style="-fx-font-size: 14px;"/>
+                        <Label text="Your booking will be submitted as PENDING. The landlord will review and approve or reject your request."
+                               styleClass="subtitle" wrapText="true" HBox.hgrow="ALWAYS"/>
+                    </HBox>
 
                     <Label fx:id="errorLabel" text="" styleClass="error-label" wrapText="true"/>
 
                     <HBox spacing="12" alignment="CENTER_RIGHT">
-                        <Button text="Cancel" onAction="#handleCancel" styleClass="secondary-button"/>
-                        <Button text="Confirm Booking" onAction="#handleSubmit"
+                        <Button text="Cancel" onAction="#handleCancel"
+                                styleClass="secondary-button"/>
+                        <Button text="✅  Confirm Booking" onAction="#handleSubmit"
                                 styleClass="primary-button"/>
                     </HBox>
                 </VBox>
@@ -81,5 +94,4 @@
             </VBox>
         </ScrollPane>
     </center>
-
 </BorderPane>

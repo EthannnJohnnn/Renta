@@ -4,12 +4,11 @@ import app.MainApp;
 import dao.PropertyDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import models.Property;
 import models.User;
 
@@ -17,11 +16,15 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
+
 public class TenantDashboardController {
 
     @FXML private Label welcomeLabel;
     @FXML private ListView<String> propertyListView;
     @FXML private TextField searchField;
+    @FXML private ComboBox<String> maxPriceFilter;
+    @FXML private CheckBox availableOnlyFilter;
 
     private final PropertyDAO propertyDAO = new PropertyDAO();
     private List<Property> allProperties;
@@ -39,8 +42,20 @@ public class TenantDashboardController {
         populateList(filteredProperties);
 
         searchField.textProperty().addListener((obs, oldVal, newVal) -> handleSearch(newVal));
+        maxPriceFilter.setItems(FXCollections.observableArrayList(
+                "₱3,000", "₱5,000", "₱8,000", "₱10,000", "₱15,000"
+        ));
     }
 
+    @FXML public void handleClearFilters() {
+        searchField.clear();
+        maxPriceFilter.setValue(null);
+        availableOnlyFilter.setSelected(false);
+        filteredProperties = allProperties;
+        populateList(filteredProperties);
+    }
+
+    // Update handleSearch() to also apply price and availability filters.
     private void handleSearch(String keyword) {
         filteredProperties = allProperties.stream()
                 .filter(p -> p.getName().toLowerCase().contains(keyword.toLowerCase())

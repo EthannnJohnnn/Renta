@@ -9,52 +9,89 @@
             styleClass="page-container"
             stylesheets="@../styles/styles.css">
 
-    <!-- TOP NAV -->
     <top>
-        <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="16">
+        <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="14">
             <padding><Insets top="14" right="24" bottom="14" left="24"/></padding>
+            <Label text="🏠" style="-fx-font-size: 20px;"/>
             <Label text="Renta" styleClass="nav-brand"/>
-            <Label text="|" styleClass="nav-title" opacity="0.3"/>
+            <Label text="/" style="-fx-text-fill: #475569;"/>
             <Label text="Browse Properties" styleClass="nav-title"/>
             <Region HBox.hgrow="ALWAYS"/>
-            <Button text="← Dashboard" onAction="#handleBackToDashboard" styleClass="secondary-button"/>
+            <Button text="← Dashboard" onAction="#handleBackToDashboard"
+                    styleClass="secondary-button"/>
             <Button text="Logout" onAction="#handleLogout" styleClass="danger-button"/>
         </HBox>
     </top>
 
-    <!-- MAIN CONTENT -->
     <center>
-        <VBox spacing="24">
-            <padding><Insets top="32" right="40" bottom="32" left="40"/></padding>
+        <VBox spacing="20">
+            <padding><Insets top="28" right="32" bottom="32" left="32"/></padding>
 
-            <!-- Header + Search Row -->
+            <!-- Header -->
             <HBox alignment="CENTER_LEFT" spacing="16">
                 <VBox spacing="4" HBox.hgrow="ALWAYS">
                     <Label text="Available Properties" styleClass="screen-title"/>
                     <Label fx:id="resultCountLabel" text="Showing all listings"
                            styleClass="subtitle"/>
                 </VBox>
-                <TextField fx:id="searchField"
-                           promptText="Search by name or address..."
-                           styleClass="input-field"
-                           prefWidth="280"/>
             </HBox>
 
+            <!-- ═══ UX IMPROVEMENT #2: SEARCH + ADVANCED FILTERS BAR ═══ -->
+            <VBox styleClass="filter-bar" spacing="14">
+                <!-- Search Row -->
+                <HBox styleClass="input-wrapper" alignment="CENTER_LEFT">
+                    <Label text="🔍" style="-fx-font-size: 15px; -fx-padding: 0 8 0 0;"/>
+                    <TextField fx:id="searchField"
+                               promptText="Search by property name or address..."
+                               styleClass="input-field" HBox.hgrow="ALWAYS"/>
+                </HBox>
+
+                <!-- Filter Controls Row -->
+                <HBox spacing="20" alignment="CENTER_LEFT">
+                    <Label text="FILTER BY" styleClass="section-label"/>
+
+                    <!-- Max Price -->
+                    <HBox spacing="8" alignment="CENTER_LEFT">
+                        <Label text="Max Price:" styleClass="label-text"/>
+                        <ComboBox fx:id="maxPriceFilter"
+                                  promptText="Any price"
+                                  styleClass="combo-field"
+                                  prefWidth="150"/>
+                    </HBox>
+
+                    <!-- Available Rooms Only -->
+                    <CheckBox fx:id="availableOnlyFilter"
+                              text="Only show properties with available rooms"
+                              styleClass="check-box"/>
+
+                    <Region HBox.hgrow="ALWAYS"/>
+
+                    <Button text="Clear Filters"
+                            onAction="#handleClearFilters"
+                            styleClass="ghost-button"/>
+                </HBox>
+            </VBox>
+
             <!-- Properties Table -->
-            <TableView fx:id="propertyTable" styleClass="table-view"
-                       VBox.vgrow="ALWAYS">
+            <TableView fx:id="propertyTable" styleClass="table-view" VBox.vgrow="ALWAYS">
                 <columns>
-                    <TableColumn fx:id="nameColumn" text="Property Name" prefWidth="220"/>
-                    <TableColumn fx:id="addressColumn" text="Address" prefWidth="240"/>
-                    <TableColumn fx:id="descriptionColumn" text="Description" prefWidth="240"/>
-                    <TableColumn fx:id="viewColumn" text="" prefWidth="120"/>
+                    <TableColumn fx:id="nameColumn"        text="Property Name" prefWidth="220"/>
+                    <TableColumn fx:id="addressColumn"     text="Address"       prefWidth="240"/>
+                    <TableColumn fx:id="descriptionColumn" text="Description"   prefWidth="240"/>
+                    <TableColumn fx:id="viewColumn"        text=""              prefWidth="120"/>
                 </columns>
+                <!-- ═══ UX IMPROVEMENT #2: FRIENDLY EMPTY STATE ═══ -->
                 <placeholder>
-                    <Label text="No properties match your search." styleClass="subtitle"/>
+                    <VBox alignment="CENTER" spacing="10">
+                        <Label text="🏘" styleClass="empty-state-icon"/>
+                        <Label text="No properties match your search"
+                               styleClass="empty-state-title"/>
+                        <Label text="Try a different name, location, or remove your price filter."
+                               styleClass="empty-state-sub"/>
+                    </VBox>
                 </placeholder>
             </TableView>
 
         </VBox>
     </center>
-
 </BorderPane>
