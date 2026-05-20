@@ -16,8 +16,8 @@ public class MainApp extends Application {
     public void start(Stage stage) {
         primaryStage = stage;
         primaryStage.setTitle("Renta");
-        primaryStage.setMinWidth(800);
-        primaryStage.setMinHeight(600);
+        primaryStage.setMinWidth(1024);
+        primaryStage.setMinHeight(768);
 
         // --- BACKEND LOGIC: Initialize the SQLite database before the UI loads ---
         dao.DatabaseHelper.initializeDatabase();
@@ -34,13 +34,12 @@ public class MainApp extends Application {
                     MainApp.class.getResource("/" + fxmlPath)
             );
             Parent root = loader.load();
-            
             if (primaryStage.getScene() != null) {
                 // If scene exists, preserve window size/fullscreen state by just swapping the root
                 primaryStage.getScene().setRoot(root);
             } else {
-                // Initial launch
-                Scene scene = new Scene(root, 800, 600);
+                // Initial launch with new larger standard
+                Scene scene = new Scene(root, 1024, 768);
                 primaryStage.setScene(scene);
             }
         } catch (IOException e) {
